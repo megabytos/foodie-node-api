@@ -1,7 +1,7 @@
 import { listRecipes, getRecipe, addRecipe, removeRecipe, updateRecipeById } from '../services/recipesServices.js';
 
 export const getAllRecipes = async (req, res) => {
-    //const { id: owner } = req.user;
+    const { id: owner } = req.user ? req.user : 0;
     const { page = 1, limit = 20, favorite, category, ingredient, area } = req.query;
     res.status(200).json(await listRecipes({ owner, page, limit, favorite, category, ingredient, area }));
 };
