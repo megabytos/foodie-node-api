@@ -1,6 +1,6 @@
 import express from 'express';
-import { logout, current, verify, resend, userRegisterController, userLoginController, updateUserAvatarController } from '../controllers/usersControllers.js';
-import { emailVerificationSchema, userRegisterSchema, userLoginSchema } from '../schemas/usersSchemas.js';
+import { userRegisterController, userLoginController, updateUserAvatarController, userLogoutController } from '../controllers/usersControllers.js';
+import { userRegisterSchema, userLoginSchema } from '../schemas/usersSchemas.js';
 import validateBody from '../helpers/validateBody.js';
 import controllerWrapper from '../helpers/controllerWrapper.js';
 import auth from '../middlewares/authenticate.js';
@@ -13,7 +13,7 @@ usersRouter.post('/register', isEmptyBody, validateBody(userRegisterSchema), con
 
 usersRouter.post('/login', validateBody(userLoginSchema), controllerWrapper(userLoginController));
 
-// usersRouter.post('/logout', auth, controllerWrapper(logout));
+usersRouter.post('/logout', auth, controllerWrapper(userLogoutController));
 
 // usersRouter.get('/current', auth, controllerWrapper(current));
 

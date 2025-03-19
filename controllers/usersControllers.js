@@ -19,7 +19,7 @@ export const userLoginController = async (req, res) => {
     });
 };
 
-export const logout = async (req, res) => {
+export const userLogoutController = async (req, res) => {
     await service.logoutUser(req.user.id);
     res.status(204).send();
 };
@@ -39,16 +39,4 @@ export const updateUserAvatarController = async (req, res) => {
             avatarURL: avatar,
         },
     });
-};
-
-export const verify = async (req, res) => {
-    const { verificationToken } = req.params;
-    const { message } = await service.verifyUser(verificationToken);
-    res.status(200).json({ message });
-};
-
-export const resend = async (req, res) => {
-    const { email } = req.body;
-    const { message } = await service.resendVerificationEmail(email);
-    res.status(200).json({ message });
 };

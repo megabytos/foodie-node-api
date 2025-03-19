@@ -60,6 +60,7 @@ export async function logoutUser(userId) {
     if (!user) {
         throw HttpError(401, 'Not authorized');
     }
+    console.log(user);
     return await user.update({ token: null }, { returning: true });
 }
 
@@ -72,32 +73,12 @@ export async function updateAvatar(id, file, folderName) {
     if (!file) {
         throw HttpError(400, 'No attached file');
     }
-    console.log(file);
     const user = await getUser({ id });
     if (!user) throw HttpError(401, 'Not authorized');
     try {
         const avatar = await saveToCloudinary(file, folderName);
         return await user.update({ avatar }, { returning: true });
     } catch (error) {
-        console.log(error);
         throw HttpError(500, 'Error during the saving user avatar in DB:');
     }
 }
-
-export async function verifyUser(verificationToken) {
-    const user = await getUser({ verificationToken });
-    if (!user) {
-        throw HttpError(404, 'User not found or already verified');
-    }
-    user.update({ verificationToken: null, verify: true }, { returning: true });
-    return { message: 'Email verified successfully' };
-}
-
-export const resendVerificationEmail = async email => {
-    const user = await getUser({ email });
-    if (!user || user.verify) {
-        throw HttpError(400, 'User not found or already verified');
-    }
-    await sendVerificationEmail(email, user.verificationToken);
-    return { message: 'Verification email sent' };
-};
