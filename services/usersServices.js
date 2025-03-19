@@ -2,11 +2,9 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../db/models/User.js';
 import HttpError from '../helpers/HttpError.js';
-import path from 'node:path';
-import fs from 'fs/promises';
-import { avatarsDir, avatarsPath } from '../middlewares/upload.js';
 import { sendVerificationEmail } from '../helpers/sendMail.js';
 import { nanoid } from 'nanoid';
+import saveToCloudinary from '../helpers/saveToCloudinary.js';
 
 const { JWT_SECRET } = process.env;
 
@@ -70,20 +68,20 @@ export async function updateUser(userId, data) {
     return user.update(data, { returning: true });
 }
 
-export async function updateAvatar(userId, file) {
+export async function updateAvatar(id, file, folderName) {
     if (!file) {
         throw HttpError(400, 'No attached file');
     }
-    const { path: tempPath, filename } = file;
-    const newPath = path.join(avatarsPath, filename);
-    const avatarPath = path.join(avatarsDir, filename);
+    console.log(file);
+    const user = await getUser({ id });
+    if (!user) throw HttpError(401, 'Not authorized');
     try {
-        await fs.rename(tempPath, newPath);
-    } catch (err) {
-        await fs.unlink(tempPath);
-        return HttpError(500, 'File upload error');
+        const avatar = await saveToCloudinary(file, folderName);
+        return await user.update({ avatar }, { returning: true });
+    } catch (error) {
+        console.log(error);
+        throw HttpError(500, 'Error during the saving user avatar in DB:');
     }
-    return await updateUser(userId, { avatarURL: avatarPath });
 }
 
 export async function verifyUser(verificationToken) {

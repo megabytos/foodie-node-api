@@ -1,3 +1,4 @@
+import HttpError from '../helpers/HttpError.js';
 import * as service from '../services/usersServices.js';
 
 export const userRegisterController = async (req, res) => {
@@ -28,10 +29,16 @@ export const current = async (req, res) => {
     res.status(200).json({ email, subscription });
 };
 
-export const avatar = async (req, res) => {
+export const updateUserAvatarController = async (req, res) => {
     const { id } = req.user;
-    const { avatarURL } = await service.updateAvatar(id, req.file);
-    res.status(200).json({ avatarURL });
+    const { avatar } = await service.updateAvatar(id, req.file, 'avatars');
+    res.status(200).json({
+        status: 200,
+        message: 'Avatar has changed successfully',
+        data: {
+            avatarURL: avatar,
+        },
+    });
 };
 
 export const verify = async (req, res) => {
