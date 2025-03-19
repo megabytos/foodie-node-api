@@ -2,7 +2,6 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../db/models/User.js';
 import HttpError from '../helpers/HttpError.js';
-import { sendVerificationEmail } from '../helpers/sendMail.js';
 import { nanoid } from 'nanoid';
 import saveToCloudinary from '../helpers/saveToCloudinary.js';
 
