@@ -1,5 +1,12 @@
 import express from 'express';
-import { userRegisterController, userLoginController, updateUserAvatarController, userLogoutController } from '../controllers/usersControllers.js';
+import {
+    userRegisterController,
+    userLoginController,
+    updateUserAvatarController,
+    userLogoutController,
+    userCurrentController,
+    userCurrentFullController,
+} from '../controllers/usersControllers.js';
 import { userRegisterSchema, userLoginSchema } from '../schemas/usersSchemas.js';
 import validateBody from '../helpers/validateBody.js';
 import controllerWrapper from '../helpers/controllerWrapper.js';
@@ -15,7 +22,11 @@ usersRouter.post('/login', validateBody(userLoginSchema), controllerWrapper(user
 
 usersRouter.post('/logout', auth, controllerWrapper(userLogoutController));
 
-// usersRouter.get('/current', auth, controllerWrapper(current));
+usersRouter.get('/current/full', auth, controllerWrapper(userCurrentFullController));
+
+usersRouter.get('/current', auth, controllerWrapper(userCurrentController));
+
+usersRouter.patch('/avatars', auth, upload.single('avatar'), controllerWrapper(updateUserAvatarController));
 
 // usersRouter.get('/:id', controllerWrapper());
 
@@ -26,11 +37,5 @@ usersRouter.post('/logout', auth, controllerWrapper(userLogoutController));
 // usersRouter.get('/followers', controllerWrapper());
 
 // usersRouter.get('/following', controllerWrapper());
-
-usersRouter.patch('/avatars', auth, upload.single('avatar'), controllerWrapper(updateUserAvatarController));
-
-// usersRouter.post('/verify', validateBody(emailVerificationSchema), controllerWrapper(resend));
-
-// usersRouter.get('/verify/:verificationToken', controllerWrapper(verify));
 
 export default usersRouter;

@@ -1,3 +1,4 @@
+import { token } from 'morgan';
 import HttpError from '../helpers/HttpError.js';
 import * as service from '../services/usersServices.js';
 
@@ -24,10 +25,24 @@ export const userLogoutController = async (req, res) => {
     res.status(204).send();
 };
 
-export const current = async (req, res) => {
-    const { email, subscription } = req.user;
-    res.status(200).json({ email, subscription });
+export const userCurrentController = async (req, res) => {
+    const { email, name, token } = req.user;
+    res.status(200).json({
+        status: 200,
+        message: 'User info found successfully',
+        data: {
+            user: {
+                name,
+                email,
+            },
+            token
+        },
+    });
 };
+
+export const userCurrentFullController = async (req, res) => {
+    
+}
 
 export const updateUserAvatarController = async (req, res) => {
     const { id } = req.user;

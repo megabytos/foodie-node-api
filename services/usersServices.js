@@ -60,7 +60,6 @@ export async function logoutUser(userId) {
     if (!user) {
         throw HttpError(401, 'Not authorized');
     }
-    console.log(user);
     return await user.update({ token: null }, { returning: true });
 }
 
