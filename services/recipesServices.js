@@ -23,7 +23,7 @@ export async function getRecipe(query) {
     const recipe = await Recipe.findOne({
         where: query,
         include: [
-            { model: Ingredient, attributes: ['name', 'img'], through: { attributes: ['measure'] } },
+            { model: Ingredient, through: { attributes: ['measure'] } },
             { model: User, attributes: ['id', 'name', 'avatar'] },
             { model: Area, attributes: ['id', 'name'] },
             { model: Category, attributes: ['id', 'name'] },
@@ -32,7 +32,24 @@ export async function getRecipe(query) {
     if (!recipe) {
         throw HttpError(404, 'Recipe not found');
     }
-    return recipe;
+    const transformedRecipe = {
+        ...recipe.toJSON(),
+        Ingredients: recipe.Ingredients.map(ingredient => ({
+            id: ingredient.id,
+            name: ingredient.name,
+            desc: ingredient.desc,
+            img: ingredient.img,
+            measure: ingredient.RecipeIngredient?.measure || null
+        })),
+        area: recipe.Area?.name || null,
+        category: recipe.Category?.name || null,
+        ownerName: recipe.User?.name || null,
+        ownerAvatar: recipe.User?.avatar || null
+    };
+    delete transformedRecipe.Area;
+    delete transformedRecipe.Category;
+    delete transformedRecipe.User;
+    return transformedRecipe;
 }
 
 export async function removeRecipe(query) {
