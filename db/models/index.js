@@ -4,14 +4,13 @@ import sequelize from '../sequelize.js';
 import Sequelize, { DataTypes, Model } from 'sequelize';
 
 // 🔹 Определяем путь к папке моделей без `__dirname`
-const modelsPath = resolve(process.cwd(), "db", "models");
+const modelsPath = resolve(process.cwd(), 'db', 'models');
 
 // 🔹 Объект для хранения моделей
 const db = {};
 
 // 🔹 Загружаем все файлы моделей динамически
-const modelFiles = readdirSync(modelsPath)
-    .filter(file => file.endsWith('.js') && file !== 'index.js');
+const modelFiles = readdirSync(modelsPath).filter(file => file.endsWith('.js') && file !== 'index.js');
 
 for (const file of modelFiles) {
     const modelModule = await import(`file://${join(modelsPath, file)}`);
@@ -50,6 +49,11 @@ Recipe.belongsToMany(User, { through: UserFavorite, foreignKey: 'recipeId', onDe
 
 User.belongsToMany(User, { as: 'Followers', through: UserFollower, foreignKey: 'userId', onDelete: 'CASCADE' });
 User.belongsToMany(User, { as: 'Following', through: UserFollower, foreignKey: 'followerId', onDelete: 'CASCADE' });
+
+Recipe.hasMany(UserFavorite, { foreignKey: 'recipeId', onDelete: 'CASCADE' });
+UserFavorite.belongsTo(Recipe, { foreignKey: 'recipeId', onDelete: 'CASCADE' });
+User.hasMany(UserFavorite, { foreignKey: 'userId', onDelete: 'CASCADE' });
+UserFavorite.belongsTo(User, { foreignKey: 'userId', onDelete: 'CASCADE' });
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;

@@ -15,7 +15,7 @@ const UserFavorite = sequelize.define('UserFavorite', {
         onDelete: 'CASCADE',
     },
 }, {
-    tableName: 'user_favorites',
+    tableName: 'UserFavorites',
     indexes: [
         { unique: true, fields: ['userId', 'recipeId'] },
         { fields: ['userId'] },
