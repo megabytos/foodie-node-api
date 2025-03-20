@@ -1,5 +1,6 @@
 import Recipe from "../db/models/Recipe.js";
 import HttpError from "../helpers/HttpError.js";
+import { Ingredient, Area, Category, User, UserFavorite } from '../db/models/index.js';
 
 export async function listRecipes({ owner, page, limit, favorite, category, ingredient, area }) {
     const where = {}
@@ -19,9 +20,17 @@ export async function listRecipes({ owner, page, limit, favorite, category, ingr
 }
 
 export async function getRecipe(query) {
-    const recipe = await Recipe.findOne({where: query});
+    const recipe = await Recipe.findOne({
+        where: query,
+        include: [
+            { model: Ingredient, attributes: ['name', 'img'], through: { attributes: ['measure'] } },
+            { model: User, attributes: ['id', 'name', 'avatar'] },
+            { model: Area, attributes: ['id', 'name'] },
+            { model: Category, attributes: ['id', 'name'] },
+        ],
+    });
     if (!recipe) {
-        throw HttpError(404, "Recipe not found");
+        throw HttpError(404, 'Recipe not found');
     }
     return recipe;
 }
