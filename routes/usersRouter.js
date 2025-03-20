@@ -6,6 +6,10 @@ import {
     userLogoutController,
     userCurrentController,
     userCurrentFullController,
+    followUserController,
+    unfollowUserController,
+    followersController,
+    followingController,
 } from '../controllers/usersControllers.js';
 import { userRegisterSchema, userLoginSchema } from '../schemas/usersSchemas.js';
 import validateBody from '../helpers/validateBody.js';
@@ -30,12 +34,12 @@ usersRouter.patch('/avatars', auth, upload.single('avatar'), controllerWrapper(u
 
 // usersRouter.get('/:id', controllerWrapper());
 
-// usersRouter.patch('/:id/follow', controllerWrapper());
+usersRouter.patch('/:id/follow', auth, controllerWrapper(followUserController));
 
-// usersRouter.patch('/:id/unfollow', controllerWrapper());
+usersRouter.patch('/:id/unfollow', auth, controllerWrapper(unfollowUserController));
 
-// usersRouter.get('/followers', controllerWrapper());
+usersRouter.get('/followers', auth, controllerWrapper(followersController));
 
-// usersRouter.get('/following', controllerWrapper());
+usersRouter.get('/following', auth, controllerWrapper(followingController));
 
 export default usersRouter;

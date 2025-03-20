@@ -1,3 +1,4 @@
+import e from 'express';
 import * as service from '../services/usersServices.js';
 
 export const userRegisterController = async (req, res) => {
@@ -29,7 +30,7 @@ export const userCurrentController = async (req, res) => {
     });
 };
 
-export const userCurrentFullController = async (req, res) => {};
+export const userCurrentFullController = async (req, res) => { };
 
 export const updateUserAvatarController = async (req, res) => {
     const { id } = req.user;
@@ -39,3 +40,35 @@ export const updateUserAvatarController = async (req, res) => {
         data,
     });
 };
+
+export const followUserController = async (req, res) => {
+    const { id: curentUser } = req.user;
+    const { id: userToFollow } = req.params;
+    const data = await service.followUser(curentUser, userToFollow);
+    res.status(200).json({
+        message: 'User followed successfully',
+        data,
+    });
+}
+
+export const unfollowUserController = async (req, res) => {
+    const { id: curentUser } = req.user;
+    const { id: userToUnfollow } = req.params;
+    const data = await service.unfollowUser(curentUser, userToUnfollow);
+    res.status(200).json({
+        message: 'User unfollowed successfully',
+        data,
+    });
+}
+
+export const followersController = async (req, res) => {
+    const { id } = req.user;
+    const data = await service.getFollowers(id);
+    res.status(200).json({ data });
+}
+
+export const followingController = async (req, res) => {
+    const { id } = req.user;
+    const data = await service.getFollowedUsers(id);
+    res.status(200).json({ data });
+}

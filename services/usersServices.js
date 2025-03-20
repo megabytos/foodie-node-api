@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../db/models/User.js';
+import UserFollower from '../db/models/UserFollower.js';
 import HttpError from '../helpers/HttpError.js';
 import { nanoid } from 'nanoid';
 import saveToCloudinary from '../helpers/saveToCloudinary.js';
@@ -81,4 +82,46 @@ export async function updateAvatar(id, file, folderName) {
     } catch (error) {
         throw HttpError(500, 'Error during the saving user avatar in DB:');
     }
+}
+
+export async function followUser(curentUser, userToFollow) {
+    if (curentUser === userToFollow) {
+        throw HttpError(400, 'You cannot follow yourself');
+    }
+    const user = await getUserById(userToFollow);
+    if (!user) {
+        throw HttpError(404, 'User not found');
+    }
+    const follower = await UserFollower.findOne({ where: { userId: userToFollow, followerId: curentUser } });
+    if (follower) {
+        throw HttpError(409, 'You already follow this user');
+    }
+    return await UserFollower.create({ userId: userToFollow, followerId: curentUser });
+}
+
+export async function unfollowUser(curentUser, userToUnfollow) {
+    if (curentUser === userToUnfollow) {
+        throw HttpError(400, 'You cannot unfollow yourself');
+    }
+    const user = await getUserById(userToUnfollow);
+    if (!user) {
+        throw HttpError(404, 'User not found');
+    }
+    const follower = await UserFollower.findOne({ where: { userId: userToUnfollow, followerId: curentUser } });
+    if (!follower) {
+        throw HttpError(409, 'You are not following this user');
+    }
+    return await follower.destroy();
+}
+
+export async function getFollowers(userId) {
+    const followers = await UserFollower.findAll({ where: { userId } });
+    const followersIds = followers.map(follower => follower.followerId);
+    return await User.findAll({ where: { id: followersIds } });
+}
+
+export async function getFollowedUsers(userId) {
+    const followedUsers = await UserFollower.findAll({ where: { followerId: userId } });
+    const followedUsersIds = followedUsers.map(followedUser => followedUser.userId);
+    return await User.findAll({ where: { id: followedUsersIds } });
 }
