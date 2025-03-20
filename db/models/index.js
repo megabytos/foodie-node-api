@@ -46,6 +46,7 @@ Ingredient.belongsToMany(Recipe, { through: RecipeIngredient, foreignKey: 'ingre
 
 User.hasMany(Testimonial, { foreignKey: 'userId', onDelete: 'CASCADE' });
 User.belongsToMany(Recipe, { through: UserFavorite, foreignKey: 'userId', onDelete: 'CASCADE' });
+Recipe.belongsToMany(User, { through: UserFavorite, foreignKey: 'recipeId', onDelete: 'CASCADE' });
 
 User.belongsToMany(User, { as: 'Followers', through: UserFollower, foreignKey: 'userId', onDelete: 'CASCADE' });
 User.belongsToMany(User, { as: 'Following', through: UserFollower, foreignKey: 'followerId', onDelete: 'CASCADE' });
