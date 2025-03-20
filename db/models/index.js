@@ -3,13 +3,10 @@ import { join, resolve } from 'path';
 import sequelize from '../sequelize.js';
 import Sequelize, { DataTypes, Model } from 'sequelize';
 
-// 🔹 Определяем путь к папке моделей без `__dirname`
 const modelsPath = resolve(process.cwd(), 'db', 'models');
 
-// 🔹 Объект для хранения моделей
 const db = {};
 
-// 🔹 Загружаем все файлы моделей динамически
 const modelFiles = readdirSync(modelsPath).filter(file => file.endsWith('.js') && file !== 'index.js');
 
 for (const file of modelFiles) {
@@ -17,23 +14,19 @@ for (const file of modelFiles) {
     const model = modelModule.default;
 
     if (model.prototype instanceof Model) {
-        // Если это класс, расширяющий Model
         model.init(model.getAttributes(DataTypes), { sequelize, modelName: model.name });
         db[model.name] = model;
     } else {
-        // Если это sequelize.define()
         db[model.name] = model;
     }
 }
 
-// 🔹 Устанавливаем связи между моделями
 Object.values(db).forEach(model => {
     if (typeof model.associate === 'function') {
         model.associate(db);
     }
 });
 
-// Определение связей между моделями
 const { Recipe, Ingredient, Category, Area, RecipeIngredient, User, Testimonial, UserFavorite, UserFollower } = db;
 
 Recipe.belongsTo(Category, { foreignKey: 'categoryId', onDelete: 'CASCADE' });
@@ -58,6 +51,5 @@ UserFavorite.belongsTo(User, { foreignKey: 'userId', onDelete: 'CASCADE' });
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-// Экспортируем объект с моделями и sequelize
 export { sequelize, Recipe, Ingredient, Category, Area, RecipeIngredient, User, Testimonial, UserFavorite, UserFollower };
 export default db;
