@@ -1,42 +1,41 @@
-import {addUser, loginUser, logoutUser, resendVerificationEmail, updateAvatar, updateUser, verifyUser} from "../services/usersServices.js";
+import * as service from '../services/usersServices.js';
 
-export const register = async (req, res) => {
-    const {email, subscription} = await addUser(req.body);
-    res.status(201).json({user: {email, subscription}});
-}
+export const userRegisterController = async (req, res) => {
+    const data = await service.addUser(req.body);
+    res.status(201).json({
+        message: 'Signup successfully',
+        data,
+    });
+};
 
-export const login = async (req, res) => {
-    const {email, subscription, token} = await loginUser(req.body);
+export const userLoginController = async (req, res) => {
+    const data = await service.loginUser(req.body);
     res.status(200).json({
-        token: token,
-        user: {email, subscription},
-    })
-}
+        message: 'User successfully log in',
+        data,
+    });
+};
 
-export const logout = async (req, res) => {
-    await logoutUser(req.user.id);
+export const userLogoutController = async (req, res) => {
+    await service.logoutUser(req.user.id);
     res.status(204).send();
-}
+};
 
-export const current = async (req, res) => {
-    const {email, subscription} = req.user;
-    res.status(200).json({email, subscription});
-}
+export const userCurrentController = async (req, res) => {
+    const { email, name, token, avatar } = req.user;
+    res.status(200).json({
+        message: 'User info found successfully',
+        data: { user: { email, name, avatarURL: avatar }, token },
+    });
+};
 
-export const avatar = async (req, res) => {
-    const {id} = req.user;
-    const {avatarURL} = await updateAvatar(id, req.file);
-    res.status(200).json({avatarURL});
-}
+export const userCurrentFullController = async (req, res) => {};
 
-export const verify = async (req, res) => {
-    const {verificationToken} = req.params;
-    const {message} = await verifyUser(verificationToken);
-    res.status(200).json({message});
-}
-
-export const resend = async (req, res) => {
-    const {email} = req.body;
-    const {message} = await resendVerificationEmail(email);
-    res.status(200).json({message});
-}
+export const updateUserAvatarController = async (req, res) => {
+    const { id } = req.user;
+    const data = await service.updateAvatar(id, req.file, 'avatars');
+    res.status(200).json({
+        message: 'Avatar has changed successfully',
+        data,
+    });
+};
