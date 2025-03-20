@@ -1,4 +1,3 @@
-import e from 'express';
 import * as service from '../services/usersServices.js';
 
 export const userRegisterController = async (req, res) => {
@@ -62,7 +61,7 @@ export const unfollowUserController = async (req, res) => {
 }
 
 export const followersController = async (req, res) => {
-    const { id } = req.user;
+    const { id } = req.params;
     const data = await service.getFollowers(id);
     res.status(200).json({ data });
 }

@@ -38,7 +38,7 @@ usersRouter.patch('/:id/follow', auth, controllerWrapper(followUserController));
 
 usersRouter.patch('/:id/unfollow', auth, controllerWrapper(unfollowUserController));
 
-usersRouter.get('/followers', auth, controllerWrapper(followersController));
+usersRouter.get('/:id/followers', auth, controllerWrapper(followersController));
 
 usersRouter.get('/following', auth, controllerWrapper(followingController));
 
