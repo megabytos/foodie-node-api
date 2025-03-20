@@ -30,7 +30,7 @@ export async function addUser(data) {
     const newUser = await User.create({ ...data, password: hashedPassword, avatarURL, verificationToken });
     const token = jwt.sign({ id: newUser.id, email }, JWT_SECRET, { expiresIn: '24h' });
     await newUser.update({ token }, { returning: true });
-    return { user: { name: newUser.name, email: newUser.email }, token };
+    return { user: { name: newUser.name, email: newUser.email, avatarURL: newUser.avatar }, token };
 }
 
 export async function loginUser(data) {
@@ -49,6 +49,7 @@ export async function loginUser(data) {
         user: {
             name: user.name,
             email: user.email,
+            avatarURL: user.avatar,
         },
         token,
     };
@@ -75,7 +76,8 @@ export async function updateAvatar(id, file, folderName) {
     if (!user) throw HttpError(401, 'Not authorized');
     try {
         const avatar = await saveToCloudinary(file, folderName);
-        return await user.update({ avatar }, { returning: true });
+        await user.update({ avatar }, { returning: true });
+        return { avatarURL: user.avatar };
     } catch (error) {
         throw HttpError(500, 'Error during the saving user avatar in DB:');
     }
