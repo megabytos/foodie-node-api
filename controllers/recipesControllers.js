@@ -1,4 +1,4 @@
-import { listRecipes, getRecipe, addRecipe, removeRecipe, updateRecipeById } from '../services/recipesServices.js';
+import { listRecipes, getRecipe, addRecipe, removeRecipe, updateRecipeById, getPopularRecipes, updateFavoriteStatus } from '../services/recipesServices.js';
 
 export const getAllRecipes = async (req, res) => {
     const { id: owner } = req.user ? req.user : 0;
@@ -30,4 +30,20 @@ export const updateRecipe = async (req, res) => {
     const { id } = req.params;
     const recipe = await updateRecipeById({ id, owner }, req.body);
     res.status(200).json(recipe);
+};
+
+export const popularRecipes = async (req, res) => {
+    const { id: activeUserId } = req.user ? req.user : { id: null };
+    const { limit = 10 } = req.query;
+    const recipes = await getPopularRecipes(activeUserId, limit);
+    res.status(200).json(recipes);
+};
+
+export const updateFavoriteController = async (req, res) => {
+    const { id: userId } = req.user;
+    const { id: recipeId } = req.params;
+    const { favorite } = req.body;
+
+    const result = await updateFavoriteStatus(userId, recipeId, favorite);
+    res.status(200).json(result);
 };

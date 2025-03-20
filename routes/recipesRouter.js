@@ -1,5 +1,5 @@
 import express from "express";
-import {getAllRecipes, getOneRecipe, deleteRecipe, createRecipe, updateRecipe} from "../controllers/recipesControllers.js";
+import {getAllRecipes, getOneRecipe, deleteRecipe, createRecipe, updateRecipe, popularRecipes, updateFavoriteController} from "../controllers/recipesControllers.js";
 import {createRecipeSchema, updateRecipeSchema, updateStatusRecipeSchema} from "../schemas/recipesSchemas.js"
 import validateBody from "../helpers/validateBody.js";
 import controllerWrapper from "../helpers/controllerWrapper.js";
@@ -9,6 +9,8 @@ const recipesRouter = express.Router();
 
 recipesRouter.get("/", controllerWrapper(getAllRecipes));
 
+recipesRouter.get("/popular", controllerWrapper(popularRecipes));
+
 recipesRouter.get("/:id", controllerWrapper(getOneRecipe));
 
 recipesRouter.delete("/:id", auth, controllerWrapper(deleteRecipe));
@@ -17,6 +19,6 @@ recipesRouter.post("/", auth, validateBody(createRecipeSchema), controllerWrappe
 
 recipesRouter.put("/:id", auth, validateBody(updateRecipeSchema), controllerWrapper(updateRecipe));
 
-recipesRouter.patch("/:id/favorite", auth, validateBody(updateStatusRecipeSchema), controllerWrapper(updateRecipe));
+recipesRouter.patch("/:id/favorite", auth, validateBody(updateStatusRecipeSchema), controllerWrapper(updateFavoriteController));
 
 export default recipesRouter;
