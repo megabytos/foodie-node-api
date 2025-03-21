@@ -1,9 +1,12 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../db/models/User.js';
+import UserFollower from '../db/models/UserFollower.js';
+import Recipe from '../db/models/Recipe.js';
 import HttpError from '../helpers/HttpError.js';
 import { nanoid } from 'nanoid';
 import saveToCloudinary from '../helpers/saveToCloudinary.js';
+import sequelize from '../db/sequelize.js';
 
 const { JWT_SECRET } = process.env;
 
@@ -81,4 +84,148 @@ export async function updateAvatar(id, file, folderName) {
     } catch (error) {
         throw HttpError(500, 'Error during the saving user avatar in DB:');
     }
+}
+
+export async function followUser(curentUser, userToFollow) {
+    if (curentUser === userToFollow) {
+        throw HttpError(400, 'You cannot follow yourself');
+    }
+    const user = await getUserById(userToFollow);
+    if (!user) {
+        throw HttpError(404, 'User not found');
+    }
+    const follower = await UserFollower.findOne({ where: { userId: userToFollow, followerId: curentUser } });
+    if (follower) {
+        throw HttpError(409, 'You already follow this user');
+    }
+    return await UserFollower.create({ userId: userToFollow, followerId: curentUser });
+}
+
+export async function unfollowUser(curentUser, userToUnfollow) {
+    if (curentUser === userToUnfollow) {
+        throw HttpError(400, 'You cannot unfollow yourself');
+    }
+    const user = await getUserById(userToUnfollow);
+    if (!user) {
+        throw HttpError(404, 'User not found');
+    }
+    const follower = await UserFollower.findOne({ where: { userId: userToUnfollow, followerId: curentUser } });
+    if (!follower) {
+        throw HttpError(409, 'You are not following this user');
+    }
+    return await follower.destroy();
+}
+
+export async function getFollowers(userId, page = 1, limit = 10, recipePage = 1, recipeLimit = 4) {
+    const offset = (page - 1) * limit;
+    const recipeOffset = (recipePage - 1) * recipeLimit;
+
+    const { count, rows } = await UserFollower.findAndCountAll({
+        where: { userId },
+        limit,
+        offset,
+        include: [
+            {
+                model: User,
+                as: 'Follower',
+            },
+        ],
+    });
+
+    const followerIds = rows.map(row => row.Follower.id);
+
+    const recipes = await Recipe.findAll({
+        where: { ownerId: followerIds },
+        limit: recipeLimit,
+        offset: recipeOffset,
+    });
+
+    const recipeCounts = await Recipe.findAll({
+        attributes: ['ownerId', [sequelize.fn('COUNT', sequelize.col('id')), 'total']],
+        where: { ownerId: followerIds },
+        group: ['ownerId'],
+    });
+
+    const recipeCountMap = recipeCounts.reduce((acc, item) => {
+        acc[item.ownerId] = item.dataValues.total;
+        return acc;
+    }, {});
+
+    const followers = rows.map(row => {
+        const user = row.Follower.toJSON();
+        const userRecipes = recipes.filter(recipe => recipe.ownerId === user.id);
+        return {
+            ...user,
+            recipes: {
+                total: recipeCountMap[user.id] || 0,
+                recipePage,
+                recipeLimit,
+                recipes: userRecipes,
+            },
+        };
+    });
+
+    return {
+        total: count,
+        page,
+        limit,
+        followers,
+    };
+}
+
+export async function getFollowedUsers(userId, page = 1, limit = 10, recipePage = 1, recipeLimit = 4) {
+    const offset = (page - 1) * limit;
+    const recipeOffset = (recipePage - 1) * recipeLimit;
+
+    const { count, rows } = await UserFollower.findAndCountAll({
+        where: { followerId: userId },
+        limit,
+        offset,
+        include: [
+            {
+                model: User,
+                as: 'User',
+            },
+        ],
+    });
+
+    const followedUserIds = rows.map(row => row.User.id);
+
+    const recipes = await Recipe.findAll({
+        where: { ownerId: followedUserIds },
+        limit: recipeLimit,
+        offset: recipeOffset,
+    });
+
+    const recipeCounts = await Recipe.findAll({
+        attributes: ['ownerId', [sequelize.fn('COUNT', sequelize.col('id')), 'total']],
+        where: { ownerId: followedUserIds },
+        group: ['ownerId'],
+    });
+
+    const recipeCountMap = recipeCounts.reduce((acc, item) => {
+        acc[item.ownerId] = item.dataValues.total;
+        return acc;
+    }, {});
+
+    const followedUsers = rows.map(row => {
+        const user = row.User.toJSON();
+        const userRecipes = recipes.filter(recipe => recipe.ownerId === user.id);
+        return {
+            ...user,
+            recipes: {
+                total: recipeCountMap[user.id] || 0,
+                recipePage,
+                recipeLimit,
+                recipes: userRecipes,
+            },
+        };
+    });
+
+    return {
+        total: count,
+        page,
+        limit,
+        followedUsers,
+    };
 }
