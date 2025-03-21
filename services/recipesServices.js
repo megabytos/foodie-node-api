@@ -1,10 +1,11 @@
 import Recipe from '../db/models/Recipe.js';
 import HttpError from '../helpers/HttpError.js';
 import sequelize from '../db/sequelize.js';
-import { Ingredient, Area, Category, User, UserFavorite } from '../db/models/index.js';
+import { Ingredient, Area, Category, User, UserFavorite, RecipeIngredient } from '../db/models/index.js';
 
 export async function listRecipes({ owner, page, limit, favorite, category, ingredient, area }) {
     const where = {};
+    const include = [{ model: User, attributes: ['id', 'name', 'avatar'] }];
     if (owner !== undefined) {
         where.ownerId = owner;
     }
@@ -14,10 +15,34 @@ export async function listRecipes({ owner, page, limit, favorite, category, ingr
     if (area !== undefined) {
         where.areaId = area;
     }
+    if (favorite) {
+        include.push({
+            model: UserFavorite,
+            as: 'favorites',
+            where: { userId: favorite },
+            attributes: []
+        });
+    }
+    if (ingredient) {
+        include.push({
+            model: Ingredient,
+            as: "ingredients",
+            where: ingredient ? { id: ingredient } : undefined,
+            attributes: ['id', 'name'],
+            through: { attributes: [] }
+        });
+    }
     const _limit = Number(limit) > 0 ? Number(limit) : 20;
     const _page = Number(page) > 1 ? Number(page) : 1;
     const offset = (_page - 1) * _limit;
-    return await Recipe.findAll({ where, limit: _limit, offset });
+    const recipes = await Recipe.findAll({ where, include, limit: _limit, offset, distinct: true});
+    recipes.forEach(recipe => {
+        recipe.setDataValue('ownerName', recipe.User?.name || null);
+        recipe.setDataValue('ownerAvatar', recipe.User?.avatar || null);
+        delete recipe.dataValues.ingredients;
+        delete recipe.dataValues.User;
+    });
+    return recipes;
 }
 
 export async function getRecipe(query) {

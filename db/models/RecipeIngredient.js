@@ -19,8 +19,9 @@ const RecipeIngredient = sequelize.define('RecipeIngredient', {
         allowNull: false,
     },
 }, {
-    tableName: 'recipe_ingredients',
+    tableName: 'RecipeIngredients',
     indexes: [
+        { unique: true, fields: ['recipeId', 'ingredientId'] },
         { fields: ['recipeId'] },
         { fields: ['ingredientId'] },
     ],
