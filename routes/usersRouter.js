@@ -5,11 +5,11 @@ import {
     updateUserAvatarController,
     userLogoutController,
     userCurrentController,
-    userCurrentFullController,
     followUserController,
     unfollowUserController,
     followersController,
     followingController,
+    userFullDetailsController,
 } from '../controllers/usersControllers.js';
 import { userRegisterSchema, userLoginSchema } from '../schemas/usersSchemas.js';
 import validateBody from '../helpers/validateBody.js';
@@ -26,13 +26,11 @@ usersRouter.post('/login', validateBody(userLoginSchema), controllerWrapper(user
 
 usersRouter.post('/logout', auth, controllerWrapper(userLogoutController));
 
-usersRouter.get('/current/full', auth, controllerWrapper(userCurrentFullController));
+usersRouter.get('/:id/full', auth, controllerWrapper(userFullDetailsController));
 
 usersRouter.get('/current', auth, controllerWrapper(userCurrentController));
 
 usersRouter.patch('/avatars', auth, upload.single('avatar'), controllerWrapper(updateUserAvatarController));
-
-// usersRouter.get('/:id', controllerWrapper());
 
 usersRouter.post('/:id/follow', auth, controllerWrapper(followUserController));
 

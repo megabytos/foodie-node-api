@@ -29,7 +29,15 @@ export const userCurrentController = async (req, res) => {
     });
 };
 
-export const userCurrentFullController = async (req, res) => { };
+export const userFullDetailsController = async (req, res) => {
+    const { id: userId } = req.params;
+    const { id } = req.user;
+    const data = await service.userFullDetails(userId, id);
+    res.status(200).json({
+        message: 'Successfully found full user details',
+        data,
+    });
+};
 
 export const updateUserAvatarController = async (req, res) => {
     const { id } = req.user;
@@ -48,7 +56,7 @@ export const followUserController = async (req, res) => {
         message: 'User followed successfully',
         data,
     });
-}
+};
 
 export const unfollowUserController = async (req, res) => {
     const { id: curentUser } = req.user;
@@ -58,18 +66,18 @@ export const unfollowUserController = async (req, res) => {
         message: 'User unfollowed successfully',
         data,
     });
-}
+};
 
 export const followersController = async (req, res) => {
     const { id } = req.params;
     const { page = 1, limit = 10, recipePage = 1, recipeLimit = 4 } = req.query;
     const data = await service.getFollowers(id, page, limit);
     res.status(200).json({ data });
-}
+};
 
 export const followingController = async (req, res) => {
     const { id } = req.user;
     const { page = 1, limit = 10, recipePage = 1, recipeLimit = 4 } = req.query;
     const data = await service.getFollowedUsers(id, page, limit, recipePage, recipeLimit);
     res.status(200).json({ data });
-}
+};
