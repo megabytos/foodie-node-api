@@ -33,7 +33,7 @@ export async function addUser(data) {
     const newUser = await User.create({ ...data, password: hashedPassword, avatarURL, verificationToken });
     const token = jwt.sign({ id: newUser.id, email }, JWT_SECRET, { expiresIn: '24h' });
     await newUser.update({ token }, { returning: true });
-    return { user: { name: newUser.name, email: newUser.email, avatarURL: newUser.avatar }, token };
+    return { user: { id: newUser.id, name: newUser.name, email: newUser.email, avatarURL: newUser.avatar }, token };
 }
 
 export async function loginUser(data) {
@@ -50,6 +50,7 @@ export async function loginUser(data) {
     await user.update({ token }, { returning: true });
     return {
         user: {
+            id: user.id,
             name: user.name,
             email: user.email,
             avatarURL: user.avatar,
@@ -67,26 +68,27 @@ export async function logoutUser(userId) {
 }
 
 export const userFullDetails = async (userId, loggedInUserId) => {
-    if(!userId) throw HttpError(400, 'Missing user id parameter')
+    if (!userId || userId === ':userId') throw HttpError(400, 'Missing user id parameter');
     const user = await User.findByPk(userId, {
         attributes: [
             'id',
             'name',
             'email',
             'avatar',
-            [sequelize.literal(`(SELECT COUNT(*) FROM "Recipes" WHERE "Recipes"."ownerId" = "User"."id")`), 'recipeCount'],
+            [sequelize.literal(`(SELECT COUNT(*) FROM "Recipes" WHERE "Recipes"."ownerId" = "User"."id")`), 'totalRecipes'],
+
+            [sequelize.literal(`(SELECT COUNT(*) FROM "UserFollowers" WHERE "UserFollowers"."userId" = "User"."id")`), 'totalFollowers'],
 
             ...(userId === loggedInUserId
-                ? [[sequelize.literal(`(SELECT COUNT(*) FROM "UserFavorites" WHERE "UserFavorites"."userId" = "User"."id")`), 'favoriteCount']]
+                ? [[sequelize.literal(`(SELECT COUNT(*) FROM "UserFollowers" WHERE "UserFollowers"."followerId" = "User"."id")`), 'totalFollowing']]
                 : []),
-
             ...(userId === loggedInUserId
-                ? [[sequelize.literal(`(SELECT COUNT(*) FROM "UserFollowers" WHERE "UserFollowers"."followerId" = "User"."id")`), 'followingCount']]
+                ? [[sequelize.literal(`(SELECT COUNT(*) FROM "UserFavorites" WHERE "UserFavorites"."userId" = "User"."id")`), 'totalFavoriteRecipes']]
                 : []),
         ],
     });
 
-    if (!user) throw HttpError(401, 'Not authorized');
+    if (!user) throw HttpError(404, 'User not found');
     return user;
 };
 
@@ -104,7 +106,7 @@ export async function updateAvatar(id, file, folderName) {
     try {
         const avatar = await saveToCloudinary(file, folderName);
         await user.update({ avatar }, { returning: true });
-        return { avatarURL: user.avatar };
+        return { id: user.id, avatarURL: user.avatar };
     } catch (error) {
         throw HttpError(500, 'Error during the saving user avatar in DB:');
     }
