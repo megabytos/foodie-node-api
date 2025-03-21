@@ -33,8 +33,8 @@ Recipe.belongsTo(Category, { foreignKey: 'categoryId', onDelete: 'CASCADE' });
 Recipe.belongsTo(User, { foreignKey: 'ownerId', onDelete: 'CASCADE' });
 Recipe.belongsTo(Area, { foreignKey: 'areaId', onDelete: 'CASCADE' });
 
-Recipe.belongsToMany(Ingredient, { through: RecipeIngredient, foreignKey: 'recipeId', onDelete: 'CASCADE' });
-Ingredient.belongsToMany(Recipe, { through: RecipeIngredient, foreignKey: 'ingredientId', onDelete: 'CASCADE' });
+Recipe.belongsToMany(Ingredient, { through: RecipeIngredient, foreignKey: 'recipeId', as: "ingredients", onDelete: 'CASCADE' });
+Ingredient.belongsToMany(Recipe, { through: RecipeIngredient, foreignKey: 'ingredientId', as: "recipes", onDelete: 'CASCADE' });
 
 User.hasMany(Testimonial, { foreignKey: 'userId', onDelete: 'CASCADE' });
 
