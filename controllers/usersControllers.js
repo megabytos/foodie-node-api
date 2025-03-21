@@ -30,7 +30,7 @@ export const userCurrentController = async (req, res) => {
 };
 
 export const userFullDetailsController = async (req, res) => {
-    const { userId } = req.params;
+    const { id: userId } = req.params;
     const { id } = req.user;
     const data = await service.userFullDetails(userId, id);
     res.status(200).json({

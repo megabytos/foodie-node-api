@@ -68,7 +68,7 @@ export async function logoutUser(userId) {
 }
 
 export const userFullDetails = async (userId, loggedInUserId) => {
-    if (!userId || userId === ':userId') throw HttpError(400, 'Missing user id parameter');
+    if (!userId || userId === ':id') throw HttpError(400, 'Missing user id parameter');
     const user = await User.findByPk(userId, {
         attributes: [
             'id',

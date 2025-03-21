@@ -26,7 +26,7 @@ usersRouter.post('/login', validateBody(userLoginSchema), controllerWrapper(user
 
 usersRouter.post('/logout', auth, controllerWrapper(userLogoutController));
 
-usersRouter.get('/user-details/:userId', auth, controllerWrapper(userFullDetailsController));
+usersRouter.get('/:id/full', auth, controllerWrapper(userFullDetailsController));
 
 usersRouter.get('/current', auth, controllerWrapper(userCurrentController));
 
