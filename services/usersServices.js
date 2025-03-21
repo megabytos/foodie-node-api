@@ -66,6 +66,30 @@ export async function logoutUser(userId) {
     return await user.update({ token: null }, { returning: true });
 }
 
+export const userFullDetails = async (userId, loggedInUserId) => {
+    if(!userId) throw HttpError(400, 'Missing user id parameter')
+    const user = await User.findByPk(userId, {
+        attributes: [
+            'id',
+            'name',
+            'email',
+            'avatar',
+            [sequelize.literal(`(SELECT COUNT(*) FROM "Recipes" WHERE "Recipes"."ownerId" = "User"."id")`), 'recipeCount'],
+
+            ...(userId === loggedInUserId
+                ? [[sequelize.literal(`(SELECT COUNT(*) FROM "UserFavorites" WHERE "UserFavorites"."userId" = "User"."id")`), 'favoriteCount']]
+                : []),
+
+            ...(userId === loggedInUserId
+                ? [[sequelize.literal(`(SELECT COUNT(*) FROM "UserFollowers" WHERE "UserFollowers"."followerId" = "User"."id")`), 'followingCount']]
+                : []),
+        ],
+    });
+
+    if (!user) throw HttpError(401, 'Not authorized');
+    return user;
+};
+
 export async function updateUser(userId, data) {
     const user = await getUserById(userId);
     return user.update(data, { returning: true });
