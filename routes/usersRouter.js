@@ -34,9 +34,9 @@ usersRouter.patch('/avatars', auth, upload.single('avatar'), controllerWrapper(u
 
 // usersRouter.get('/:id', controllerWrapper());
 
-usersRouter.patch('/:id/follow', auth, controllerWrapper(followUserController));
+usersRouter.post('/:id/follow', auth, controllerWrapper(followUserController));
 
-usersRouter.patch('/:id/unfollow', auth, controllerWrapper(unfollowUserController));
+usersRouter.delete('/:id/unfollow', auth, controllerWrapper(unfollowUserController));
 
 usersRouter.get('/:id/followers', auth, controllerWrapper(followersController));
 

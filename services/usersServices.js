@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../db/models/User.js';
 import UserFollower from '../db/models/UserFollower.js';
+import Recipe from '../db/models/Recipe.js';
 import HttpError from '../helpers/HttpError.js';
 import { nanoid } from 'nanoid';
 import saveToCloudinary from '../helpers/saveToCloudinary.js';
@@ -114,14 +115,90 @@ export async function unfollowUser(curentUser, userToUnfollow) {
     return await follower.destroy();
 }
 
-export async function getFollowers(userId) {
-    const followers = await UserFollower.findAll({ where: { userId } });
-    const followersIds = followers.map(follower => follower.followerId);
-    return await User.findAll({ where: { id: followersIds } });
+export async function getFollowers(userId, page = 1, limit = 10, recipePage = 1, recipeLimit = 4) {
+    const offset = (page - 1) * limit;
+    const recipeOffset = (recipePage - 1) * recipeLimit;
+    const { count, rows } = await UserFollower.findAndCountAll({
+        where: { userId },
+        limit,
+        offset,
+        include: [
+            {
+                model: User,
+                as: 'Follower',
+                include: [
+                    {
+                        model: Recipe,
+                        as: 'ownedRecipes',
+                        limit: recipeLimit,
+                        offset: recipeOffset,
+                        separate: true,
+                    },
+                ],
+            },
+        ],
+    });
+    const followers = await Promise.all(rows.map(async row => {
+        const user = row.Follower.toJSON();
+        const totalRecipes = await Recipe.count({ where: { ownerId: user.id } });
+        return {
+            ...user,
+            ownedRecipes: {
+                total: totalRecipes,
+                page: recipePage,
+                limit: recipeLimit,
+                recipes: row.Follower.ownedRecipes,
+            }
+        }
+    }));
+    return {
+        total: count,
+        page,
+        limit,
+        followers,
+    };
 }
 
-export async function getFollowedUsers(userId) {
-    const followedUsers = await UserFollower.findAll({ where: { followerId: userId } });
-    const followedUsersIds = followedUsers.map(followedUser => followedUser.userId);
-    return await User.findAll({ where: { id: followedUsersIds } });
+export async function getFollowedUsers(userId, page = 1, limit = 10, recipePage = 1, recipeLimit = 4) {
+    const offset = (page - 1) * limit;
+    const recipeOffset = (recipePage - 1) * recipeLimit;
+    const { count, rows } = await UserFollower.findAndCountAll({
+        where: { followerId: userId },
+        limit,
+        offset,
+        include: [
+            {
+                model: User,
+                as: 'User',
+                include: [
+                    {
+                        model: Recipe,
+                        as: 'ownedRecipes',
+                        limit: recipeLimit,
+                        offset: recipeOffset,
+                        separate: true,
+                    },
+                ],
+            },
+        ],
+    });
+    const followedUsers = await Promise.all(rows.map(async row => {
+        const user = row.User.toJSON();
+        const totalRecipes = await Recipe.count({ where: { ownerId: user.id } });
+        return {
+            ...user,
+            ownedRecipes: {
+                total: totalRecipes,
+                page: recipePage,
+                limit: recipeLimit,
+                recipes: row.User.ownedRecipes,
+            }
+        }
+    }));
+    return {
+        total: count,
+        page,
+        limit,
+        followedUsers,
+    };
 }

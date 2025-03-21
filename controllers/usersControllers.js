@@ -62,12 +62,14 @@ export const unfollowUserController = async (req, res) => {
 
 export const followersController = async (req, res) => {
     const { id } = req.params;
-    const data = await service.getFollowers(id);
+    const { page = 1, limit = 10, recipePage = 1, recipeLimit = 4 } = req.query;
+    const data = await service.getFollowers(id, page, limit);
     res.status(200).json({ data });
 }
 
 export const followingController = async (req, res) => {
     const { id } = req.user;
-    const data = await service.getFollowedUsers(id);
+    const { page = 1, limit = 10, recipePage = 1, recipeLimit = 4 } = req.query;
+    const data = await service.getFollowedUsers(id, page, limit, recipePage, recipeLimit);
     res.status(200).json({ data });
 }
