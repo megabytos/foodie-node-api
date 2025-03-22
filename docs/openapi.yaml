@@ -15,6 +15,8 @@ tags:
       description:  API for retrieving a list of categories.
     - name: Ingredients
       description: API for retrieving a list of ingredients.
+    - name: Testimonials
+      description: API for retrieving a list of testimonials.
 servers:
     - url: http://localhost:3000/api
 paths:
@@ -57,6 +59,9 @@ paths:
     /ingredients:
         get:
             $ref: ../swagger/paths/ingredients/ingredients.yaml
+    /testimonials:
+        get:
+            $ref: ../swagger/paths/testimonials/testimonials.yaml
 components:
     securitySchemes:
         bearerAuth:

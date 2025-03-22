@@ -30,6 +30,10 @@
     {
       "name": "Ingredients",
       "description": "API for retrieving a list of ingredients."
+    },
+    {
+      "name": "Testimonials",
+      "description": "API for retrieving a list of testimonials."
     }
   ],
   "paths": {
@@ -1314,6 +1318,67 @@
                         "type": "string",
                         "format": "date-time",
                         "example": "2025-03-19T14:12:31.012Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/testimonials": {
+      "get": {
+        "tags": [
+          "Testimonials"
+        ],
+        "summary": "Get all testimonials",
+        "description": "This endpoint retrieves a list of all available testimonials.",
+        "operationId": "getAllTestimonials",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved all testimonials",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "userId",
+                      "testimonial",
+                      "createdAt"
+                    ],
+                    "properties": {
+                      "id": {
+                        "description": "Unique identifier for the testimonial",
+                        "type": "string",
+                        "example": "647495d0c825f1570b04182d"
+                      },
+                      "userId": {
+                        "description": "ID of the user who gave the testimonial",
+                        "type": "string",
+                        "example": "64c8d958249fae54bae90bb9"
+                      },
+                      "testimonial": {
+                        "description": "Content of the testimonial provided by the user",
+                        "type": "string",
+                        "example": "Foodies has transformed my cooking experience! With its diverse recipe collection and user-friendly interface, I can easily find, save, and cook delicious meals for any occasion. From quick dinners to elaborate feasts, this app has become my go-to kitchen companion. Highly recommended!"
+                      },
+                      "createdAt": {
+                        "description": "Timestamp when the testimonial was created",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-03-19T14:12:30.889Z"
                       }
                     }
                   }
