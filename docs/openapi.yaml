@@ -24,6 +24,9 @@ paths:
     /users/current:
         get:
             $ref: ../swagger/paths/users/current.yaml
+    /users/{id}/full:
+        get:
+            $ref: ../swagger/paths/users/{id}/full.yaml
     /users/avatars:
         patch:
             $ref: ../swagger/paths/users/avatars.yaml

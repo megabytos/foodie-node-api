@@ -1,0 +1,99 @@
+tags:
+    - Users
+summary: Get full details of a user
+description: |
+    Retrieve detailed information about a user. 
+    - If the logged-in user requests their own details, the following data will be returned:
+      - `id`
+      - `name`
+      - `email`
+      - `avatarURL`
+      - `totalRecipes`
+      - `totalFollowers`
+      - `totalFollowing`
+      - `totalFavoriteRecipes`
+
+    - If the logged-in user requests details of another user, the following data will be returned:
+      - `id`
+      - `name`
+      - `email`
+      - `avatarURL`
+      - `totalRecipes`
+      - `totalFollowers`
+operationId: getUserFullDetails
+security:
+    - bearerAuth: []
+parameters:
+    - name: id
+      in: path
+      description: 'User ID to retrieve full details'
+      required: true
+      schema:
+          type: string
+          example: '64c8d958249fae54bae90bb9'
+responses:
+    '200':
+        description: 'Successfully retrieved full user details'
+        content:
+            application/json:
+                schema:
+                    type: object
+                    required:
+                        - message
+                        - data
+                    properties:
+                        message:
+                            type: string
+                            example: 'Successfully found full user details'
+                        data:
+                            type: object
+                            required:
+                                - id
+                                - name
+                                - email
+                                - avatarURL
+                                - totalRecipes
+                                - totalFollowers
+                                - totalFollowing
+                                - totalFavoriteRecipes
+                            properties:
+                                id:
+                                    description: "User's ID"
+                                    type: string
+                                    example: '671264281222679af8484a00'
+                                name:
+                                    description: "User's name"
+                                    type: string
+                                    example: 'John'
+                                email:
+                                    description: "User's email"
+                                    type: string
+                                    example: 'john@gmail.com'
+                                avatarURL:
+                                    description: "User's avatar URL"
+                                    type: string
+                                    example: 'https://example.com/avatar.jpg'
+                                totalRecipes:
+                                    description: 'Total number of recipes created by the user'
+                                    type: integer
+                                    example: 10
+                                totalFollowers:
+                                    description: 'Total number of followers of the user'
+                                    type: integer
+                                    example: 150
+                                totalFollowing:
+                                    description: 'Total number of users the user is following'
+                                    type: integer
+                                    example: 20
+                                totalFavoriteRecipes:
+                                    description: 'Total number of favorite recipes of the user'
+                                    type: integer
+                                    example: 5
+    '400':
+        description: 'Bad request: Missing user ID parameter'
+    '401':
+        $ref: ../../../components/responses/401.yaml
+    '404':
+        $ref: ../../../components/responses/404.yaml
+    '500':
+        $ref: ../../../components/responses/500.yaml
