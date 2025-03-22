@@ -27,6 +27,9 @@ paths:
     /users/avatars:
         patch:
             $ref: ../swagger/paths/users/avatars.yaml
+    /users/following:
+        get:
+            $ref: ../swagger/paths/users/following.yaml
 components:
     securitySchemes:
         bearerAuth:
