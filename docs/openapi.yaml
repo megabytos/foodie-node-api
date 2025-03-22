@@ -11,6 +11,8 @@ tags:
       description: Auth operations, user info and list operation with followers.
     - name: Areas
       description: API for retrieving a list of areas.
+    - name: Categories
+      description: This endpoint retrieves a list of all available categories. The response will return the categories with their details.
 servers:
     - url: http://localhost:3000/api
 paths:
@@ -47,6 +49,9 @@ paths:
     /areas:
         get:
             $ref: ../swagger/paths/areas/areas.yaml
+    /categories:
+        get:
+            $ref: ../swagger/paths/categories/categories.yaml
 components:
     securitySchemes:
         bearerAuth:

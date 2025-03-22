@@ -1,0 +1,31 @@
+tags:
+  - Categories
+summary: Get all categories
+description: This endpoint retrieves a list of all available categories. The response will return the categories with their details.
+operationId: getAllCategories
+security: []
+responses:
+  '200':
+    description: 'Successfully retrieved all categories'
+    content:
+      application/json:
+        schema:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+              - name
+            properties:
+              id:
+                description: 'Unique identifier for the category'
+                type: string
+                example: '12345'
+              name:
+                description: 'Name of the category'
+                type: string
+                example: 'Beef'
+  '400':
+        description: 'Bad request'
+  '500':
+    $ref: ../../components/responses/500.yaml
