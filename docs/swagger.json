@@ -358,6 +358,88 @@
           }
         }
       }
+    },
+    "/users/avatars": {
+      "patch": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Update user avatar",
+        "description": "Update the avatar image of the currently authenticated user",
+        "operationId": "updateUserAvatar",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "avatar": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "User avatar image file to upload"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Avatar updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Avatar has changed successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "required": [
+                        "id",
+                        "avatarURL"
+                      ],
+                      "properties": {
+                        "id": {
+                          "description": "User's id",
+                          "type": "string",
+                          "example": "671264281222679af8484a00"
+                        },
+                        "avatarURL": {
+                          "description": "User's avatar URL",
+                          "type": "string",
+                          "example": "https://res.cloudinary.com/example-avatar.jpg"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request: Invalid file type or no file attached"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
     }
   },
   "components": {

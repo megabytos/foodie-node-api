@@ -24,6 +24,9 @@ paths:
     /users/current:
         get:
             $ref: ../swagger/paths/users/current.yaml
+    /users/avatars:
+        patch:
+            $ref: ../swagger/paths/users/avatars.yaml
 components:
     securitySchemes:
         bearerAuth:
