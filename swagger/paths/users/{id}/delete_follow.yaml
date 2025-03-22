@@ -1,0 +1,57 @@
+tags:
+    - Users
+summary: Unfollow a user
+description: |
+    Allows the logged-in user to unfollow another user. 
+    - If the logged-in user tries to unfollow themselves, the request will fail with a `400` status code.
+    - If the logged-in user is not following the target user, the request will fail with a `409` status code.
+    - The user to be unfollowed must exist, otherwise a `404` status code will be returned.
+operationId: unfollowUser
+security:
+    - bearerAuth: []
+parameters:
+    - name: id
+      in: path
+      description: 'User ID of the target user to be unfollowed'
+      required: true
+      schema:
+          type: string
+          example: '671264281222679af8484a00'
+responses:
+    '200':
+        description: 'Successfully unfollowed the user'
+        content:
+            application/json:
+                schema:
+                    type: object
+                    required:
+                        - message
+                        - data
+                    properties:
+                        message:
+                            type: string
+                            example: 'User unfollowed successfully'
+                        data:
+                            type: object
+                            required:
+                                - userId
+                                - unfollowerId
+                            properties:
+                                userId:
+                                    description: 'The ID of the user being unfollowed'
+                                    type: string
+                                    example: '671264281222679af8484a00'
+                                unfollowerId:
+                                    description: 'The ID of the user who is unfollowing'
+                                    type: string
+                                    example: 'abcdef1234567890'
+    '400':
+        description: 'Bad request: You cannot unfollow yourself'
+    '404':
+        description: 'User not found: The target user to be unfollowed does not exist'
+    '409':
+        description: 'Conflict: You are not following this user'
+    '401':
+        $ref: ../../../components/responses/401.yaml
+    '500':
+        $ref: ../../../components/responses/500.yaml

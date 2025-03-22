@@ -32,7 +32,10 @@ paths:
             $ref: ../swagger/paths/users/avatars.yaml
     /users/{id}/follow:
         post:
-            $ref: ../swagger/paths/users/{id}/follow.yaml
+            $ref: ../swagger/paths/users/{id}/add_follow.yaml
+    /users/{id}/unfollow:
+        delete:
+            $ref: ../swagger/paths/users/{id}/delete_follow.yaml
     /users/following:
         get:
             $ref: ../swagger/paths/users/following.yaml
