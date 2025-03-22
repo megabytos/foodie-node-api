@@ -25,7 +25,11 @@
     },
     {
       "name": "Categories",
-      "description": "This endpoint retrieves a list of all available categories. The response will return the categories with their details."
+      "description": "API for retrieving a list of categories."
+    },
+    {
+      "name": "Ingredients",
+      "description": "API for retrieving a list of ingredients."
     }
   ],
   "paths": {
@@ -1213,6 +1217,79 @@
                         "description": "Name of the category",
                         "type": "string",
                         "example": "Beef"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/ingredients": {
+      "get": {
+        "tags": [
+          "Ingredients"
+        ],
+        "summary": "Get all ingredients",
+        "description": "This endpoint retrieves a list of all available ingredients. The response will return the ingredients with their details.",
+        "operationId": "getAllIngredients",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved all ingredients",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "name",
+                      "desc",
+                      "img"
+                    ],
+                    "properties": {
+                      "id": {
+                        "description": "Unique identifier for the ingredient",
+                        "type": "string",
+                        "example": "640c2dd963a319ea671e37aa"
+                      },
+                      "name": {
+                        "description": "Name of the ingredient",
+                        "type": "string",
+                        "example": "Squid"
+                      },
+                      "desc": {
+                        "description": "A detailed description of the ingredient",
+                        "type": "string",
+                        "example": "A type of cephalopod with a soft, cylindrical body and long tentacles, often used in seafood dishes such as calamari or grilled squid."
+                      },
+                      "img": {
+                        "description": "URL to the image of the ingredient",
+                        "type": "string",
+                        "format": "uri",
+                        "example": "https://ftp.goit.study/img/so-yummy/ingredients/640c2dd963a319ea671e37aa.png"
+                      },
+                      "createdAt": {
+                        "description": "Timestamp of when the ingredient was created",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-03-19T14:12:31.012Z"
+                      },
+                      "updatedAt": {
+                        "description": "Timestamp of when the ingredient was last updated",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-03-19T14:12:31.012Z"
                       }
                     }
                   }

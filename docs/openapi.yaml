@@ -12,7 +12,9 @@ tags:
     - name: Areas
       description: API for retrieving a list of areas.
     - name: Categories
-      description: This endpoint retrieves a list of all available categories. The response will return the categories with their details.
+      description:  API for retrieving a list of categories.
+    - name: Ingredients
+      description: API for retrieving a list of ingredients.
 servers:
     - url: http://localhost:3000/api
 paths:
@@ -52,6 +54,9 @@ paths:
     /categories:
         get:
             $ref: ../swagger/paths/categories/categories.yaml
+    /ingredients:
+        get:
+            $ref: ../swagger/paths/ingredients/ingredients.yaml
 components:
     securitySchemes:
         bearerAuth:
