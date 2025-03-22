@@ -8,7 +8,10 @@
     "seed-tables": "node db/seed.js",
     "migrate": "npx sequelize-cli db:migrate --config=db/config.js",
     "undo-migrate": "npx sequelize-cli db:migrate:undo",
-    "seed": "npx sequelize-cli db:seed:all"
+    "seed": "npx sequelize-cli db:seed:all",
+    "build": "npm run build-docs",
+    "build-docs": "redocly bundle docs/openapi.yaml --ext json -o docs/swagger.json",
+    "preview-docs": "redocly preview-docs"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
@@ -26,6 +29,7 @@
     "sequelize": "^6.37.6"
   },
   "devDependencies": {
+    "@redocly/cli": "^1.34.0",
     "nodemon": "^3.0.2",
     "sequelize-cli": "^6.6.2"
   }
