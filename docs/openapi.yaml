@@ -36,6 +36,9 @@ paths:
     /users/{id}/unfollow:
         delete:
             $ref: ../swagger/paths/users/{id}/delete_follow.yaml
+    /users/{id}/followers:
+        get:
+            $ref: ../swagger/paths/users/{id}/followers.yaml
     /users/following:
         get:
             $ref: ../swagger/paths/users/following.yaml
