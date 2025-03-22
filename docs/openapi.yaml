@@ -12,11 +12,14 @@ tags:
     - name: Areas
       description: API for retrieving a list of areas.
     - name: Categories
-      description:  API for retrieving a list of categories.
+      description: API for retrieving a list of categories.
     - name: Ingredients
       description: API for retrieving a list of ingredients.
     - name: Testimonials
       description: API for retrieving a list of testimonials.
+    - name: Recipes
+      description: Recipe management, search, favorites, and personal recipe operations including creation and deletion.
+
 servers:
     - url: http://localhost:3000/api
 paths:
@@ -62,6 +65,9 @@ paths:
     /testimonials:
         get:
             $ref: ../swagger/paths/testimonials/testimonials.yaml
+    /recipes:
+        get:
+            $ref: ../swagger/paths/recipes/getAllRecipes.yaml
 components:
     securitySchemes:
         bearerAuth:

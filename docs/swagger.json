@@ -34,6 +34,10 @@
     {
       "name": "Testimonials",
       "description": "API for retrieving a list of testimonials."
+    },
+    {
+      "name": "Recipes",
+      "description": "Recipe management, search, favorites, and personal recipe operations including creation and deletion."
     }
   ],
   "paths": {
@@ -1379,6 +1383,158 @@
                         "type": "string",
                         "format": "date-time",
                         "example": "2025-03-19T14:12:30.889Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/recipes": {
+      "get": {
+        "tags": [
+          "Recipes"
+        ],
+        "summary": "Get all recipes",
+        "description": "This endpoint retrieves a list of all recipes based on the provided filters such as owner, category, area, ingredient, and favorite.\nThe response will return a paginated list of recipes along with their details including the owner name and avatar.\n",
+        "operationId": "getAllRecipes",
+        "security": [],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "description": "The page number to fetch (pagination)",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "The number of items per page",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "example": 20
+            }
+          },
+          {
+            "in": "query",
+            "name": "favorite",
+            "description": "The user ID to filter recipes that are marked as favorites by the user",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "64c8d958249fae54bae90bb9"
+            }
+          },
+          {
+            "in": "query",
+            "name": "category",
+            "description": "The category ID to filter recipes",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "some-category-id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "ingredient",
+            "description": "The ingredient ID to filter recipes that contain a specific ingredient",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "some-ingredient-id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "area",
+            "description": "The area ID to filter recipes by area",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "some-area-id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved all recipes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "title",
+                      "categoryId",
+                      "ownerId",
+                      "areaId",
+                      "instructions",
+                      "description",
+                      "time",
+                      "thumb"
+                    ],
+                    "properties": {
+                      "id": {
+                        "description": "Unique identifier for the recipe",
+                        "type": "string",
+                        "example": "recipe-id"
+                      },
+                      "title": {
+                        "description": "Title of the recipe",
+                        "type": "string",
+                        "example": "Grilled Squid"
+                      },
+                      "categoryId": {
+                        "description": "Category ID the recipe belongs to",
+                        "type": "string",
+                        "example": "category-id"
+                      },
+                      "ownerId": {
+                        "description": "ID of the user who owns the recipe",
+                        "type": "string",
+                        "example": "user-id"
+                      },
+                      "areaId": {
+                        "description": "Area ID the recipe belongs to",
+                        "type": "string",
+                        "example": "area-id"
+                      },
+                      "instructions": {
+                        "description": "Step-by-step cooking instructions",
+                        "type": "string",
+                        "example": "Step 1: Prepare the squid..."
+                      },
+                      "description": {
+                        "description": "Brief description of the recipe",
+                        "type": "string",
+                        "example": "A delicious grilled squid recipe for seafood lovers."
+                      },
+                      "time": {
+                        "description": "Time (in minutes) required to prepare the recipe",
+                        "type": "integer",
+                        "example": 30
+                      },
+                      "thumb": {
+                        "description": "Thumbnail image URL for the recipe",
+                        "type": "string",
+                        "example": "https://example.com/recipe-thumbnail.jpg"
                       }
                     }
                   }
