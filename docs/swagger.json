@@ -1634,6 +1634,152 @@
           }
         }
       }
+    },
+    "/recipes/{id}": {
+      "get": {
+        "tags": [
+          "Recipes"
+        ],
+        "summary": "Get a single recipe by ID",
+        "description": "This endpoint retrieves detailed information about a specific recipe by its ID.\nThe response includes the recipe's title, description, instructions, ingredients, owner details, and associated category and area.\n",
+        "operationId": "getOneRecipe",
+        "security": [],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "The ID of the recipe to retrieve",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "6462a8f74c3d0ddd28897fcd"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved the recipe",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "title",
+                    "description",
+                    "instructions",
+                    "time",
+                    "thumb",
+                    "ingredients",
+                    "area",
+                    "category",
+                    "ownerName",
+                    "ownerAvatar"
+                  ],
+                  "properties": {
+                    "id": {
+                      "description": "Unique identifier for the recipe",
+                      "type": "string",
+                      "example": "6462a8f74c3d0ddd28897fcd"
+                    },
+                    "title": {
+                      "description": "Title of the recipe",
+                      "type": "string",
+                      "example": "Grilled Squid"
+                    },
+                    "description": {
+                      "description": "Brief description of the recipe",
+                      "type": "string",
+                      "example": "A delicious grilled squid recipe for seafood lovers."
+                    },
+                    "instructions": {
+                      "description": "Step-by-step cooking instructions",
+                      "type": "string",
+                      "example": "Step 1: Prepare the squid..."
+                    },
+                    "time": {
+                      "description": "Time (in minutes) required to prepare the recipe",
+                      "type": "integer",
+                      "example": 30
+                    },
+                    "thumb": {
+                      "description": "Thumbnail image URL for the recipe",
+                      "type": "string",
+                      "example": "https://example.com/recipe-thumbnail.jpg"
+                    },
+                    "ingredients": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "id",
+                          "name",
+                          "desc",
+                          "img",
+                          "measure"
+                        ],
+                        "properties": {
+                          "id": {
+                            "description": "Unique identifier for the ingredient",
+                            "type": "string",
+                            "example": "ingredient-id"
+                          },
+                          "name": {
+                            "description": "Name of the ingredient",
+                            "type": "string",
+                            "example": "Squid"
+                          },
+                          "desc": {
+                            "description": "Description of the ingredient",
+                            "type": "string",
+                            "example": "Fresh squid"
+                          },
+                          "img": {
+                            "description": "Image URL of the ingredient",
+                            "type": "string",
+                            "example": "https://example.com/squid.jpg"
+                          },
+                          "measure": {
+                            "description": "Measurement for the ingredient in this recipe",
+                            "type": "string",
+                            "example": "500g"
+                          }
+                        }
+                      }
+                    },
+                    "area": {
+                      "description": "Name of the area associated with the recipe",
+                      "type": "string",
+                      "example": "Mediterranean"
+                    },
+                    "category": {
+                      "description": "Name of the category associated with the recipe",
+                      "type": "string",
+                      "example": "Seafood"
+                    },
+                    "ownerName": {
+                      "description": "Name of the user who owns the recipe",
+                      "type": "string",
+                      "example": "John Doe"
+                    },
+                    "ownerAvatar": {
+                      "description": "Avatar URL of the user who owns the recipe",
+                      "type": "string",
+                      "example": "https://example.com/avatar.jpg"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recipe not found"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
     }
   },
   "components": {

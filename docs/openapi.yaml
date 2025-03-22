@@ -71,6 +71,9 @@ paths:
     /recipes/popular:
         get:
             $ref: ../swagger/paths/recipes/popular.yaml
+    /recipes/{id}:
+        get:
+            $ref: ../swagger/paths/recipes/{id}/getOneRecipe.yaml
 
 components:
     securitySchemes:
