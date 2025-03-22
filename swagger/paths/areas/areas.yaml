@@ -25,6 +25,16 @@ responses:
                                 description: 'Name of the area'
                                 type: string
                                 example: 'North Area'
+                            createdAt:
+                                description: 'Timestamp of when the area was created'
+                                type: string
+                                format: date-time
+                                example: '2025-03-19T14:12:31.012Z'
+                            updatedAt:
+                                description: 'Timestamp of when the area was last updated'
+                                type: string
+                                format: date-time
+                                example: '2025-03-19T14:12:31.012Z'
     '400':
         description: 'Bad request'
     '500':
