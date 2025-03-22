@@ -68,6 +68,8 @@ paths:
     /recipes:
         get:
             $ref: ../swagger/paths/recipes/getAllRecipes.yaml
+        post: 
+            $ref: ../swagger/paths/recipes/addRecipe.yaml
     /recipes/popular:
         get:
             $ref: ../swagger/paths/recipes/popular.yaml

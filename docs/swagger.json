@@ -1549,6 +1549,124 @@
             "$ref": "#/components/responses/500"
           }
         }
+      },
+      "post": {
+        "tags": [
+          "Recipes"
+        ],
+        "summary": "Create a new recipe",
+        "description": "This endpoint allows an authenticated user to create a new recipe.\nThe request body must include the recipe's title, time, instructions, description, and favorite status.\nThe response will return the created recipe with its details.\n",
+        "operationId": "createRecipe",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "title",
+                  "time"
+                ],
+                "properties": {
+                  "title": {
+                    "description": "Title of the recipe",
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 128,
+                    "example": "Grilled Squid"
+                  },
+                  "time": {
+                    "description": "Time (in minutes) required to prepare the recipe",
+                    "type": "integer",
+                    "example": 30
+                  },
+                  "instructions": {
+                    "description": "Step-by-step cooking instructions",
+                    "type": "string",
+                    "example": "Step 1: Prepare the squid..."
+                  },
+                  "description": {
+                    "description": "Brief description of the recipe",
+                    "type": "string",
+                    "example": "A delicious grilled squid recipe for seafood lovers."
+                  },
+                  "favorite": {
+                    "description": "Indicates whether the recipe is marked as favorite",
+                    "type": "boolean",
+                    "default": false,
+                    "example": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully created the recipe",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "title",
+                    "time",
+                    "instructions",
+                    "description",
+                    "favorite"
+                  ],
+                  "properties": {
+                    "id": {
+                      "description": "Unique identifier for the recipe",
+                      "type": "string",
+                      "example": "6462a8f74c3d0ddd28897fcd"
+                    },
+                    "title": {
+                      "description": "Title of the recipe",
+                      "type": "string",
+                      "example": "Grilled Squid"
+                    },
+                    "time": {
+                      "description": "Time (in minutes) required to prepare the recipe",
+                      "type": "integer",
+                      "example": 30
+                    },
+                    "instructions": {
+                      "description": "Step-by-step cooking instructions",
+                      "type": "string",
+                      "example": "Step 1: Prepare the squid..."
+                    },
+                    "description": {
+                      "description": "Brief description of the recipe",
+                      "type": "string",
+                      "example": "A delicious grilled squid recipe for seafood lovers."
+                    },
+                    "favorite": {
+                      "description": "Indicates whether the recipe is marked as favorite",
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid input data)"
+          },
+          "401": {
+            "description": "Unauthorized (missing or invalid token)"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
       }
     },
     "/recipes/popular": {
