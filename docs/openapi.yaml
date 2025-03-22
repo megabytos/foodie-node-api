@@ -21,6 +21,9 @@ paths:
     /users/logout:
         post:
             $ref: ../swagger/paths/users/logout.yaml
+    /users/current:
+        get:
+            $ref: ../swagger/paths/users/current.yaml
 components:
     securitySchemes:
         bearerAuth:

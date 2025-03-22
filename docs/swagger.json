@@ -270,6 +270,94 @@
           }
         }
       }
+    },
+    "/users/current": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get current logged-in user info",
+        "description": "Get the information of the currently logged-in user based on the JWT token",
+        "operationId": "getCurrentUser",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved user info",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User info found successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "required": [
+                        "user",
+                        "token"
+                      ],
+                      "properties": {
+                        "user": {
+                          "type": "object",
+                          "required": [
+                            "id",
+                            "name",
+                            "email",
+                            "avatarURL"
+                          ],
+                          "properties": {
+                            "id": {
+                              "description": "User's id",
+                              "type": "string",
+                              "example": "671264281222679af8484a00"
+                            },
+                            "name": {
+                              "description": "User's name",
+                              "type": "string",
+                              "example": "John"
+                            },
+                            "email": {
+                              "description": "User's email",
+                              "type": "string",
+                              "example": "john@gmail.com"
+                            },
+                            "avatarURL": {
+                              "description": "User's avatar URL",
+                              "type": "string",
+                              "example": ""
+                            }
+                          }
+                        },
+                        "token": {
+                          "description": "JWT token for the authenticated user",
+                          "type": "string",
+                          "example": "jwt_token_example"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -280,6 +368,25 @@
       }
     },
     "responses": {
+      "401": {
+        "description": "Unauthorized error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "message"
+              ],
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Not authorized"
+                }
+              }
+            }
+          }
+        }
+      },
       "409": {
         "description": "Conflict error",
         "content": {
