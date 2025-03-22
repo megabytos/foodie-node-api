@@ -1,0 +1,61 @@
+tags:
+  - Recipes
+summary: Get popular recipes
+description: |
+  This endpoint retrieves a list of the most popular recipes based on the number of times they have been favorited by users.
+  The response includes recipe details, owner information, and whether the recipe is favorited by the active user.
+operationId: getPopularRecipes
+security: []
+parameters:
+  - in: query
+    name: limit
+    description: The number of recipes to fetch (default is 10)
+    required: false
+    schema:
+      type: integer
+      example: 10
+responses:
+  '200':
+    description: Successfully retrieved popular recipes
+    content:
+      application/json:
+        schema:
+          type: array
+          items:
+            type: object
+            required:
+              - recipeId
+              - recipeName
+              - recipeDescription
+              - recipeUserName
+              - recipeUserAvatar
+              - recipeLikeStatus
+            properties:
+              recipeId:
+                description: 'Unique identifier for the recipe'
+                type: string
+                example: 'recipe-id'
+              recipeName:
+                description: 'Title of the recipe'
+                type: string
+                example: 'Grilled Squid'
+              recipeDescription:
+                description: 'Brief description of the recipe'
+                type: string
+                example: 'A delicious grilled squid recipe for seafood lovers.'
+              recipeUserName:
+                description: 'Name of the user who owns the recipe'
+                type: string
+                example: 'John Doe'
+              recipeUserAvatar:
+                description: 'Avatar URL of the user who owns the recipe'
+                type: string
+                example: 'https://example.com/avatar.jpg'
+              recipeLikeStatus:
+                description: 'Indicates whether the recipe is favorited by the active user'
+                type: boolean
+                example: true
+  '400':
+    description: 'Bad request'
+  '500':
+    $ref: '../../components/responses/500.yaml'

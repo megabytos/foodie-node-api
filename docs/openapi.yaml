@@ -68,6 +68,10 @@ paths:
     /recipes:
         get:
             $ref: ../swagger/paths/recipes/getAllRecipes.yaml
+    /recipes/popular:
+        get:
+            $ref: ../swagger/paths/recipes/popular.yaml
+
 components:
     securitySchemes:
         bearerAuth:
