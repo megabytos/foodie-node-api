@@ -250,6 +250,26 @@
           }
         }
       }
+    },
+    "/users/logout": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Logout user",
+        "description": "Logs out the user",
+        "operationId": "logoutUser",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Bad request"
+          }
+        }
+      }
     }
   },
   "components": {
