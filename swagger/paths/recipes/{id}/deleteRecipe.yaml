@@ -20,7 +20,7 @@ responses:
   '204':
     description: Successfully deleted the recipe
   '401':
-    $ref: '../../../components/responses/500.yaml'
+    $ref: '../../../components/responses/401.yaml'
   '403':
     description: 'Forbidden (user is not the owner of the recipe)'
   '404':

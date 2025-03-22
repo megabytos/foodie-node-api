@@ -68,7 +68,7 @@ paths:
     /recipes:
         get:
             $ref: ../swagger/paths/recipes/getAllRecipes.yaml
-        post: 
+        post:
             $ref: ../swagger/paths/recipes/addRecipe.yaml
     /recipes/popular:
         get:
@@ -76,7 +76,9 @@ paths:
     /recipes/{id}:
         get:
             $ref: ../swagger/paths/recipes/{id}/getOneRecipe.yaml
-        delete: 
+        put:
+            $ref: ../swagger/paths/recipes/{id}/updateRecipe.yaml
+        delete:
             $ref: ../swagger/paths/recipes/{id}/deleteRecipe.yaml
 
 components:
