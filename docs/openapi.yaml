@@ -76,6 +76,8 @@ paths:
     /recipes/{id}:
         get:
             $ref: ../swagger/paths/recipes/{id}/getOneRecipe.yaml
+        delete: 
+            $ref: ../swagger/paths/recipes/{id}/deleteRecipe.yaml
 
 components:
     securitySchemes:
