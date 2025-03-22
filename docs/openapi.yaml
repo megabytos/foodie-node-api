@@ -30,6 +30,9 @@ paths:
     /users/avatars:
         patch:
             $ref: ../swagger/paths/users/avatars.yaml
+    /users/{id}/follow:
+        post:
+            $ref: ../swagger/paths/users/{id}/follow.yaml
     /users/following:
         get:
             $ref: ../swagger/paths/users/following.yaml

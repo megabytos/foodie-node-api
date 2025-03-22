@@ -557,6 +557,89 @@
         }
       }
     },
+    "/users/{id}/follow": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Follow a user",
+        "description": "Allows the logged-in user to follow another user. \n- If the logged-in user tries to follow themselves, the request will fail with a `400` status code.\n- If the logged-in user is already following the target user, the request will fail with a `409` status code.\n- The user to be followed must exist, otherwise a `404` status code will be returned.\n",
+        "operationId": "followUser",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User ID of the target user to be followed",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "671264281222679af8484a00"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully followed the user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User followed successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "required": [
+                        "userId",
+                        "followerId"
+                      ],
+                      "properties": {
+                        "userId": {
+                          "description": "The ID of the user being followed",
+                          "type": "string",
+                          "example": "671264281222679af8484a00"
+                        },
+                        "followerId": {
+                          "description": "The ID of the user who is following",
+                          "type": "string",
+                          "example": "abcdef1234567890"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request: You cannot follow yourself"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "description": "User not found: The target user to be followed does not exist"
+          },
+          "409": {
+            "description": "Conflict: You are already following this user"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
     "/users/following": {
       "get": {
         "tags": [
