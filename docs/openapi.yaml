@@ -46,7 +46,7 @@ paths:
             $ref: ../swagger/paths/users/following.yaml
     /areas:
         get:
-            $ref: ../swagger/paths/areas.yaml
+            $ref: ../swagger/paths/areas/areas.yaml
 components:
     securitySchemes:
         bearerAuth:

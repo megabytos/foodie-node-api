@@ -1135,8 +1135,9 @@
           "Areas"
         ],
         "summary": "Get all areas",
-        "description": "This endpoint retrieves a list of all available areas. The response will return the areas with their details.\n",
+        "description": "This endpoint retrieves a list of all available areas. The response will return the areas with their details.",
         "operationId": "getAllAreas",
+        "security": [],
         "responses": {
           "200": {
             "description": "Successfully retrieved all areas",
@@ -1166,6 +1167,9 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad request"
           },
           "500": {
             "$ref": "#/components/responses/500"
