@@ -9,6 +9,8 @@ info:
 tags:
     - name: Users
       description: Auth operations, user info and list operation with followers.
+    - name: Areas
+      description: API for retrieving a list of areas.
 servers:
     - url: http://localhost:3000/api
 paths:
@@ -42,6 +44,9 @@ paths:
     /users/following:
         get:
             $ref: ../swagger/paths/users/following.yaml
+    /areas:
+        get:
+            $ref: ../swagger/paths/areas.yaml
 components:
     securitySchemes:
         bearerAuth:

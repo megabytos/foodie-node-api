@@ -1,0 +1,29 @@
+tags:
+    - Areas
+summary: Get all areas
+description: |
+    This endpoint retrieves a list of all available areas. The response will return the areas with their details.
+operationId: getAllAreas
+responses:
+    '200':
+        description: 'Successfully retrieved all areas'
+        content:
+            application/json:
+                schema:
+                    type: array
+                    items:
+                        type: object
+                        required:
+                            - id
+                            - name
+                        properties:
+                            id:
+                                description: 'Unique identifier for the area'
+                                type: string
+                                example: '12345'
+                            name:
+                                description: 'Name of the area'
+                                type: string
+                                example: 'North Area'
+    '500':
+        $ref: ../components/responses/500.yaml
