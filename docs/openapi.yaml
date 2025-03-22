@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
     version: 1.0.0
-    title: Foodie's app
+    title: Foodie app
     license:
         name: Apache 2.0
         url: http://www.apache.org/licenses/LICENSE-2.0.html
@@ -10,8 +10,11 @@ tags:
     - name: Users
       description: Auth operations, user info and list operation with followers.
 servers:
-    - url: http://localhost:3000
-# paths:
+    - url: http://localhost:3000/api
+paths:
+    /users/register:
+        post:
+            $ref: ../swagger/paths/users/register.yaml
 components:
     securitySchemes:
         bearerAuth:
