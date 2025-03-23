@@ -35,9 +35,10 @@ export const updateRecipe = async (req, res) => {
 };
 
 export const popularRecipes = async (req, res) => {
-    const { id: activeUserId } = req.user ? req.user : { id: null };
+    const userData = getCurrentUserData(req);
+    const currentUserId = userData ? userData.id : null;
     const { limit = 10 } = req.query;
-    const recipes = await getPopularRecipes(activeUserId, limit);
+    const recipes = await getPopularRecipes(limit, currentUserId);
     res.status(200).json(recipes);
 };
 
