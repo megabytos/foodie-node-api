@@ -1,0 +1,91 @@
+openapi: 3.1.0
+info:
+    version: 1.0.0
+    title: Foodie app
+    license:
+        name: Apache 2.0
+        url: http://www.apache.org/licenses/LICENSE-2.0.html
+    description: This is a documentation of foodie's app
+tags:
+    - name: Users
+      description: Auth operations, user info and list operation with followers.
+    - name: Areas
+      description: API for retrieving a list of areas.
+    - name: Categories
+      description: API for retrieving a list of categories.
+    - name: Ingredients
+      description: API for retrieving a list of ingredients.
+    - name: Testimonials
+      description: API for retrieving a list of testimonials.
+    - name: Recipes
+      description: Recipe management, search, favorites, and personal recipe operations including creation and deletion.
+
+servers:
+    - url: http://localhost:3000/api
+paths:
+    /users/register:
+        post:
+            $ref: ../swagger/paths/users/register.yaml
+    /users/login:
+        post:
+            $ref: ../swagger/paths/users/login.yaml
+    /users/logout:
+        post:
+            $ref: ../swagger/paths/users/logout.yaml
+    /users/current:
+        get:
+            $ref: ../swagger/paths/users/current.yaml
+    /users/{id}/full:
+        get:
+            $ref: ../swagger/paths/users/{id}/full.yaml
+    /users/avatars:
+        patch:
+            $ref: ../swagger/paths/users/avatars.yaml
+    /users/{id}/follow:
+        post:
+            $ref: ../swagger/paths/users/{id}/add_follow.yaml
+    /users/{id}/unfollow:
+        delete:
+            $ref: ../swagger/paths/users/{id}/delete_follow.yaml
+    /users/{id}/followers:
+        get:
+            $ref: ../swagger/paths/users/{id}/followers.yaml
+    /users/following:
+        get:
+            $ref: ../swagger/paths/users/following.yaml
+    /areas:
+        get:
+            $ref: ../swagger/paths/areas/areas.yaml
+    /categories:
+        get:
+            $ref: ../swagger/paths/categories/categories.yaml
+    /ingredients:
+        get:
+            $ref: ../swagger/paths/ingredients/ingredients.yaml
+    /testimonials:
+        get:
+            $ref: ../swagger/paths/testimonials/testimonials.yaml
+    /recipes:
+        get:
+            $ref: ../swagger/paths/recipes/getAllRecipes.yaml
+        post:
+            $ref: ../swagger/paths/recipes/addRecipe.yaml
+    /recipes/popular:
+        get:
+            $ref: ../swagger/paths/recipes/popular.yaml
+    /recipes/{id}:
+        get:
+            $ref: ../swagger/paths/recipes/{id}/getOneRecipe.yaml
+        put:
+            $ref: ../swagger/paths/recipes/{id}/updateRecipe.yaml
+        delete:
+            $ref: ../swagger/paths/recipes/{id}/deleteRecipe.yaml
+    /recipes/{id}/favorite:
+        patch:
+            $ref: ../swagger/paths/recipes/{id}/favorite.yaml
+
+components:
+    securitySchemes:
+        bearerAuth:
+            type: http
+            scheme: bearer

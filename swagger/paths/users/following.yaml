@@ -1,0 +1,133 @@
+tags:
+    - Users
+summary: Get list of users the current user is following
+description: 'Retrieve a list of users that the authenticated user is following along with their recipes'
+operationId: getFollowedUsers
+security:
+    - bearerAuth: []
+parameters:
+    - name: page
+      in: query
+      description: 'Page number for pagination of followed users'
+      required: false
+      schema:
+          type: integer
+          default: 1
+    - name: limit
+      in: query
+      description: 'Number of followed users to return per page'
+      required: false
+      schema:
+          type: integer
+          default: 10
+    - name: recipePage
+      in: query
+      description: 'Page number for pagination of recipes'
+      required: false
+      schema:
+          type: integer
+          default: 1
+    - name: recipeLimit
+      in: query
+      description: 'Number of recipes to return per page for each followed user'
+      required: false
+      schema:
+          type: integer
+          default: 4
+responses:
+    '200':
+        description: 'Successfully retrieved followed users with their recipes'
+        content:
+            application/json:
+                schema:
+                    type: object
+                    required:
+                        - data
+                    properties:
+                        data:
+                            type: object
+                            required:
+                                - total
+                                - page
+                                - limit
+                                - followedUsers
+                            properties:
+                                total:
+                                    type: integer
+                                    description: 'Total number of followed users'
+                                    example: 15
+                                page:
+                                    type: integer
+                                    description: 'Current page number for followed users'
+                                    example: 1
+                                limit:
+                                    type: integer
+                                    description: 'Number of followed users per page'
+                                    example: 10
+                                followedUsers:
+                                    type: array
+                                    items:
+                                        type: object
+                                        required:
+                                            - id
+                                            - name
+                                            - email
+                                            - avatarURL
+                                            - recipes
+                                        properties:
+                                            id:
+                                                description: "User's id"
+                                                type: string
+                                                example: '671264281222679af8484a00'
+                                            name:
+                                                description: "User's name"
+                                                type: string
+                                                example: 'John'
+                                            email:
+                                                description: "User's email"
+                                                type: string
+                                                example: 'john@gmail.com'
+                                            avatarURL:
+                                                description: "User's avatar URL"
+                                                type: string
+                                                example: 'https://example.com/avatar.jpg'
+                                            recipes:
+                                                type: object
+                                                required:
+                                                    - total
+                                                    - recipePage
+                                                    - recipeLimit
+                                                    - recipes
+                                                properties:
+                                                    total:
+                                                        description: 'Total number of recipes for this followed user'
+                                                        type: integer
+                                                        example: 20
+                                                    recipePage:
+                                                        description: 'Current page for recipes of the followed user'
+                                                        type: integer
+                                                        example: 1
+                                                    recipeLimit:
+                                                        description: 'Limit of recipes per page'
+                                                        type: integer
+                                                        example: 4
+                                                    recipes:
+                                                        type: array
+                                                        items:
+                                                            type: object
+                                                            required:
+                                                                - id
+                                                                - name
+                                                            properties:
+                                                                id:
+                                                                    description: "Recipe's id"
+                                                                    type: string
+                                                                    example: '61d1b2d2f0c0b5001cfd5be3'
+                                                                name:
+                                                                    description: "Recipe's name"
+                                                                    type: string
+                                                                    example: 'Spaghetti Bolognese'
+    '401':
+        $ref: ../../components/responses/401.yaml
+    '500':
+        $ref: ../../components/responses/500.yaml

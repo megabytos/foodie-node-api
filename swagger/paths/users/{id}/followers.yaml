@@ -1,0 +1,155 @@
+tags:
+    - Users
+summary: Get a user's followers
+description: |
+    This endpoint allows you to retrieve the followers of a specific user. 
+    You can specify pagination parameters to limit the number of followers and the number of recipes to return.
+    - The followers are listed with basic information and their associated recipes (if available).
+    - The response will also include the total number of followers and total recipes for each follower.
+operationId: getFollowers
+security:
+    - bearerAuth: []
+parameters:
+    - name: id
+      in: path
+      description: 'User ID to get followers for'
+      required: true
+      schema:
+          type: string
+          example: '671264281222679af8484a00'
+    - name: page
+      in: query
+      description: 'Page number for pagination (defaults to 1)'
+      required: false
+      schema:
+          type: integer
+          example: 1
+    - name: limit
+      in: query
+      description: 'Number of followers to return per page (defaults to 10)'
+      required: false
+      schema:
+          type: integer
+          example: 10
+    - name: recipePage
+      in: query
+      description: 'Page number for recipes pagination (defaults to 1)'
+      required: false
+      schema:
+          type: integer
+          example: 1
+    - name: recipeLimit
+      in: query
+      description: 'Number of recipes to return per follower (defaults to 4)'
+      required: false
+      schema:
+          type: integer
+          example: 4
+responses:
+    '200':
+        description: 'Successfully retrieved followers'
+        content:
+            application/json:
+                schema:
+                    type: object
+                    required:
+                        - data
+                    properties:
+                        data:
+                            type: object
+                            required:
+                                - total
+                                - page
+                                - limit
+                                - followers
+                            properties:
+                                total:
+                                    description: 'Total number of followers'
+                                    type: integer
+                                    example: 25
+                                page:
+                                    description: 'Current page number'
+                                    type: integer
+                                    example: 1
+                                limit:
+                                    description: 'Number of followers returned per page'
+                                    type: integer
+                                    example: 10
+                                followers:
+                                    type: array
+                                    items:
+                                        type: object
+                                        required:
+                                            - id
+                                            - name
+                                            - email
+                                            - avatarURL
+                                            - recipes
+                                        properties:
+                                            id:
+                                                description: "Follower's id"
+                                                type: string
+                                                example: 'abc123'
+                                            name:
+                                                description: "Follower's name"
+                                                type: string
+                                                example: 'Jane Doe'
+                                            email:
+                                                description: "Follower's email"
+                                                type: string
+                                                example: 'janedoe@gmail.com'
+                                            avatarURL:
+                                                description: "Follower's avatar URL"
+                                                type: string
+                                                example: 'http://example.com/avatar.jpg'
+                                            recipes:
+                                                description: 'Recipes owned by the follower'
+                                                type: object
+                                                required:
+                                                    - total
+                                                    - recipePage
+                                                    - recipeLimit
+                                                    - recipes
+                                                properties:
+                                                    total:
+                                                        description: 'Total number of recipes owned by the follower'
+                                                        type: integer
+                                                        example: 5
+                                                    recipePage:
+                                                        description: 'Current page number for recipes'
+                                                        type: integer
+                                                        example: 1
+                                                    recipeLimit:
+                                                        description: 'Number of recipes per page'
+                                                        type: integer
+                                                        example: 4
+                                                    recipes:
+                                                        description: 'List of recipes owned by the follower'
+                                                        type: array
+                                                        items:
+                                                            type: object
+                                                            required:
+                                                                - id
+                                                                - name
+                                                                - description
+                                                            properties:
+                                                                id:
+                                                                    description: "Recipe's id"
+                                                                    type: string
+                                                                    example: 'recipe123'
+                                                                name:
+                                                                    description: "Recipe's name"
+                                                                    type: string
+                                                                    example: 'Delicious Pasta'
+                                                                description:
+                                                                    description: "Recipe's description"
+                                                                    type: string
+                                                                    example: 'A tasty pasta dish with garlic and olive oil.'
+    '400':
+        description: 'Bad request: Invalid or missing query parameters'
+    '401':
+        $ref: ../../../components/responses/401.yaml
+    '404':
+        $ref: ../../../components/responses/404.yaml
+    '500':
+        $ref: ../../../components/responses/500.yaml

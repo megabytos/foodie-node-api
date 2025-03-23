@@ -22,10 +22,10 @@ export const userLogoutController = async (req, res) => {
 };
 
 export const userCurrentController = async (req, res) => {
-    const { email, name, token, avatar } = req.user;
+    const { id, email, name, token, avatar } = req.user;
     res.status(200).json({
         message: 'User info found successfully',
-        data: { user: { email, name, avatarURL: avatar }, token },
+        data: { user: { id, email, name, avatarURL: avatar }, token },
     });
 };
 
