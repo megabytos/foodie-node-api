@@ -142,11 +142,76 @@ export async function unfollowUser(curentUser, userToUnfollow) {
     return await follower.destroy();
 }
 
+// export async function getFollowers(userId, page = 1, limit = 10, recipePage = 1, recipeLimit = 4) {
+//     const offset = (page - 1) * limit;
+//     const recipeOffset = (recipePage - 1) * recipeLimit;
+
+//     const { count, rows } = await UserFollower.findAndCountAll({
+//         where: { userId },
+//         limit,
+//         offset,
+//         include: [
+//             {
+//                 model: User,
+//                 as: 'Follower',
+//             },
+//         ],
+//     });
+
+//     const followerIds = rows.map(row => row.Follower.id);
+
+//     const recipes = await Recipe.findAll({
+//         where: { ownerId: followerIds },
+//         limit: recipeLimit,
+//         offset: recipeOffset,
+//     });
+
+//     const recipeCounts = await Recipe.findAll({
+//         attributes: ['ownerId', [sequelize.fn('COUNT', sequelize.col('id')), 'total']],
+//         where: { ownerId: followerIds },
+//         group: ['ownerId'],
+//     });
+
+//     const recipeCountMap = recipeCounts.reduce((acc, item) => {
+//         acc[item.ownerId] = item.dataValues.total;
+//         return acc;
+//     }, {});
+
+//     const followers = rows.map(row => {
+//         const user = row.Follower.toJSON();
+//         const userRecipes = recipes.filter(recipe => recipe.ownerId === user.id);
+//         return {
+//             ...user,
+//             recipes: {
+//                 total: recipeCountMap[user.id] || 0,
+//                 recipePage,
+//                 recipeLimit,
+//                 recipes: userRecipes,
+//             },
+//         };
+//     });
+
+//     return {
+//         total: count,
+//         page,
+//         limit,
+//         followers,
+//     };
+// }
+
 export async function getFollowers(userId, page = 1, limit = 10, recipePage = 1, recipeLimit = 4) {
+    const totalFollowers = await UserFollower.count({ where: { userId } });
+    const countTotalPages = Math.ceil(totalFollowers / limit);
+    const totalPages = countTotalPages === 0 ? 1 : countTotalPages;
+
+    if (page < 1 || page > totalPages) {
+        throw new Error(`Page ${page} is out of range. Total pages: ${totalPages}`);
+    }
+
     const offset = (page - 1) * limit;
     const recipeOffset = (recipePage - 1) * recipeLimit;
 
-    const { count, rows } = await UserFollower.findAndCountAll({
+    const followers = await UserFollower.findAll({
         where: { userId },
         limit,
         offset,
@@ -154,48 +219,45 @@ export async function getFollowers(userId, page = 1, limit = 10, recipePage = 1,
             {
                 model: User,
                 as: 'Follower',
+                attributes: [
+                    'id',
+                    'name',
+                    'avatar',
+                    [sequelize.literal(`(SELECT COUNT(*) FROM "Recipes" WHERE "Recipes"."ownerId" = "UserFollowers"."id")`), 'totalRecipes'],
+                    [
+                        sequelize.literal(`(
+                        SELECT json_agg(json_build_object(
+                            'id', "Recipes"."id",
+                            'thumb', "Recipes"."thumb"
+                        ))
+                        FROM (
+                            SELECT "id", "thumb"
+                            FROM "Recipes"
+                            WHERE "Recipes"."ownerId" = "UserFollowers"."id"
+                            LIMIT ${recipeLimit}
+                            OFFSET ${recipeOffset}
+                        ) AS "Recipes"
+                    `),
+                        'recipes',
+                    ],
+                ],
             },
         ],
     });
 
-    const followerIds = rows.map(row => row.Follower.id);
-
-    const recipes = await Recipe.findAll({
-        where: { ownerId: followerIds },
-        limit: recipeLimit,
-        offset: recipeOffset,
-    });
-
-    const recipeCounts = await Recipe.findAll({
-        attributes: ['ownerId', [sequelize.fn('COUNT', sequelize.col('id')), 'total']],
-        where: { ownerId: followerIds },
-        group: ['ownerId'],
-    });
-
-    const recipeCountMap = recipeCounts.reduce((acc, item) => {
-        acc[item.ownerId] = item.dataValues.total;
-        return acc;
-    }, {});
-
-    const followers = rows.map(row => {
-        const user = row.Follower.toJSON();
-        const userRecipes = recipes.filter(recipe => recipe.ownerId === user.id);
-        return {
-            ...user,
-            recipes: {
-                total: recipeCountMap[user.id] || 0,
-                recipePage,
-                recipeLimit,
-                recipes: userRecipes,
-            },
-        };
-    });
-
     return {
-        total: count,
+        total: totalFollowers,
         page,
         limit,
-        followers,
+        followers: followers.map(follower => ({
+            ...follower.Follower.toJSON(),
+            recipes: {
+                total: follower.Follower.get('totalRecipes'),
+                recipePage,
+                recipeLimit,
+                recipes: follower.Follower.get('recipes') || [],
+            },
+        })),
     };
 }
 
