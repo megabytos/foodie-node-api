@@ -20,13 +20,6 @@ parameters:
       schema:
           type: integer
           default: 10
-    - name: recipePage
-      in: query
-      description: 'Page number for pagination of recipes'
-      required: false
-      schema:
-          type: integer
-          default: 1
     - name: recipeLimit
       in: query
       description: 'Number of recipes to return per page for each followed user'
@@ -42,91 +35,85 @@ responses:
                 schema:
                     type: object
                     required:
-                        - data
+                        - following
+                        - page
+                        - limit
+                        - totalItem
+                        - totalPage
+                        - hasPreviousPage
+                        - hasNextPage
                     properties:
-                        data:
-                            type: object
-                            required:
-                                - total
-                                - page
-                                - limit
-                                - followedUsers
-                            properties:
-                                total:
-                                    type: integer
-                                    description: 'Total number of followed users'
-                                    example: 15
-                                page:
-                                    type: integer
-                                    description: 'Current page number for followed users'
-                                    example: 1
-                                limit:
-                                    type: integer
-                                    description: 'Number of followed users per page'
-                                    example: 10
-                                followedUsers:
-                                    type: array
-                                    items:
-                                        type: object
-                                        required:
-                                            - id
-                                            - name
-                                            - email
-                                            - avatarURL
-                                            - recipes
-                                        properties:
-                                            id:
-                                                description: "User's id"
-                                                type: string
-                                                example: '671264281222679af8484a00'
-                                            name:
-                                                description: "User's name"
-                                                type: string
-                                                example: 'John'
-                                            email:
-                                                description: "User's email"
-                                                type: string
-                                                example: 'john@gmail.com'
-                                            avatarURL:
-                                                description: "User's avatar URL"
-                                                type: string
-                                                example: 'https://example.com/avatar.jpg'
-                                            recipes:
-                                                type: object
-                                                required:
-                                                    - total
-                                                    - recipePage
-                                                    - recipeLimit
-                                                    - recipes
-                                                properties:
-                                                    total:
-                                                        description: 'Total number of recipes for this followed user'
-                                                        type: integer
-                                                        example: 20
-                                                    recipePage:
-                                                        description: 'Current page for recipes of the followed user'
-                                                        type: integer
-                                                        example: 1
-                                                    recipeLimit:
-                                                        description: 'Limit of recipes per page'
-                                                        type: integer
-                                                        example: 4
-                                                    recipes:
-                                                        type: array
-                                                        items:
-                                                            type: object
-                                                            required:
-                                                                - id
-                                                                - name
-                                                            properties:
-                                                                id:
-                                                                    description: "Recipe's id"
-                                                                    type: string
-                                                                    example: '61d1b2d2f0c0b5001cfd5be3'
-                                                                name:
-                                                                    description: "Recipe's name"
-                                                                    type: string
-                                                                    example: 'Spaghetti Bolognese'
+                        following:
+                            type: array
+                            items:
+                                type: object
+                                required:
+                                    - id
+                                    - name
+                                    - avatar
+                                    - totalRecipes
+                                    - ownedRecipes
+                                properties:
+                                    id:
+                                        description: "User's id"
+                                        type: string
+                                        example: 'example user id'
+                                    name:
+                                        description: "User's name"
+                                        type: string
+                                        example: 'Example user name'
+                                    avatar:
+                                        oneOf:
+                                            - type: string
+                                              description: "Follower's avatar URL"
+                                              example: 'http://example.com/avatar.jpg'
+                                            - type: 'null'
+                                              description: 'Avatar can be null'
+                                              example: null
+                                    totalRecipes:
+                                        description: 'Total number of recipes for this followed user'
+                                        type: string
+                                        example: '1'
+                                    ownedRecipes:
+                                        type: array
+                                        items:
+                                            type: object
+                                            required:
+                                                - id
+                                                - thumb
+                                            properties:
+                                                id:
+                                                    description: "Recipe's id"
+                                                    type: string
+                                                    example: 'Example recipe id'
+                                                thumb:
+                                                    description: "Recipe's thumbnail URL"
+                                                    type: string
+                                                    example: 'http://example.com/recipe.jpg'
+                        page:
+                            description: 'Current page number for followed users'
+                            type: integer
+                            example: 1
+                        limit:
+                            description: 'Number of followed users per page'
+                            type: integer
+                            example: 5
+                        totalItem:
+                            description: 'Total number of followed users'
+                            type: integer
+                            example: 1
+                        totalPage:
+                            description: 'Total number of pages'
+                            type: integer
+                            example: 1
+                        hasPreviousPage:
+                            description: 'Indicates if there is a previous page'
+                            type: boolean
+                            example: false
+                        hasNextPage:
+                            description: 'Indicates if there is a next page'
+                            type: boolean
+                            example: false
     '401':
         $ref: ../../components/responses/401.yaml
     '500':
