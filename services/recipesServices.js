@@ -1,6 +1,7 @@
 import Recipe from '../db/models/Recipe.js';
 import HttpError from '../helpers/HttpError.js';
 import sequelize from '../db/sequelize.js';
+import { Sequelize } from 'sequelize';
 
 import { Ingredient, Area, Category, User, UserFavorite, RecipeIngredient } from '../db/models/index.js';
 
@@ -39,7 +40,8 @@ export async function listRecipes({ page, limit, favorite, category, ingredient,
     const _limit = Number(limit) > 0 ? Number(limit) : 20;
     const _page = Number(page) > 1 ? Number(page) : 1;
     const offset = (_page - 1) * _limit;
-    const recipes = await Recipe.findAll({
+
+    const { count: total, rows: recipes } = await Recipe.findAndCountAll({
         attributes: { exclude: ['createdAt', 'updatedAt', 'instructions'] },
         where,
         include,
@@ -52,7 +54,7 @@ export async function listRecipes({ page, limit, favorite, category, ingredient,
         delete recipe.dataValues.User;
         delete recipe.dataValues.favorites;
     });
-    return recipes;
+    return {total, recipes};
 }
 
 export async function getRecipe(query) {
@@ -103,43 +105,38 @@ export async function updateRecipeById(query, data) {
     return recipe.update(data, { returning: true });
 }
 
-export async function getPopularRecipes(activeUserId, limit = 10) {
+export async function getPopularRecipes(limit = 10, currentUserId) {
+    const include = [{ model: User, attributes: ['id', 'name', 'avatar'] }];
+    if (currentUserId) {
+        include.push({
+            model: UserFavorite,
+            as: 'favorites',
+            attributes: ['userId'],
+            where: { userId: currentUserId },
+            required: false
+        });
+    }
     const recipes = await Recipe.findAll({
-        attributes: [
-            'id',
-            ['title', 'recipeName'],
-            ['description', 'recipeDescription'],
-            [sequelize.literal('(SELECT COUNT(*) FROM "UserFavorites" WHERE "UserFavorites"."recipeId" = "Recipe"."id")'), 'favoriteCount'],
-        ],
-        include: [
-            {
-                model: User,
-                attributes: [
-                    ['name', 'recipeUserName'],
-                    ['avatar', 'recipeUserAvatar'],
-                ],
-            },
-        ],
-        order: [[sequelize.literal('"favoriteCount"'), 'DESC']],
-        limit,
+        attributes: {
+            include: [
+                [Sequelize.literal(`(SELECT COUNT(*) FROM "UserFavorites" AS "fav" WHERE "fav"."recipeId" = "Recipe"."id")`), 'favoritesCount']
+            ],
+            exclude: ['createdAt', 'updatedAt', 'instructions']
+        },
+
+        include,
+        order: [[Sequelize.literal('"favoritesCount"'), 'DESC']],
+        limit
     });
-
-    const favoriteStatuses = await UserFavorite.findAll({
-        attributes: ['recipeId'],
-        where: { userId: activeUserId },
+    recipes.forEach(recipe => {
+        recipe.setDataValue('ownerName', recipe.User?.name || null);
+        recipe.setDataValue('ownerAvatar', recipe.User?.avatar || null);
+        recipe.setDataValue('isFavorite', currentUserId ? (recipe.favorites?.length > 0) : false);
+        recipe.setDataValue('favoritesCount', Number(recipe.getDataValue('favoritesCount')));
+        delete recipe.dataValues.User;
+        delete recipe.dataValues.favorites;
     });
-
-    const favoriteRecipeIds = new Set(favoriteStatuses.map(fav => fav.recipeId));
-
-    return recipes.map(recipe => ({
-        recipeId: recipe.id,
-        recipeName: recipe.get('recipeName'),
-        recipeDescription: recipe.get('recipeDescription'),
-        recipeUserName: recipe.User.get('recipeUserName'),
-        recipeUserAvatar: recipe.User.get('recipeUserAvatar'),
-        recipeLikeStatus: favoriteRecipeIds.has(recipe.id),
-        favoriteCount: recipe.get('favoriteCount'),
-    }));
+    return recipes;
 }
 
 export async function updateFavoriteStatus(userId, recipeId, favorite) {
