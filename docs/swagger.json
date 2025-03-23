@@ -749,7 +749,7 @@
           "Users"
         ],
         "summary": "Get a user's followers",
-        "description": "This endpoint allows you to retrieve the followers of a specific user. \nYou can specify pagination parameters to limit the number of followers and the number of recipes to return.\n- The followers are listed with basic information and their associated recipes (if available).\n- The response will also include the total number of followers and total recipes for each follower.\n",
+        "description": "This endpoint retrieves the followers of a specific user.\n- Each follower contains basic information and a list of their owned recipes (if available).\n- The response includes pagination details for both followers and their recipes.\n",
         "operationId": "getFollowers",
         "security": [
           {
@@ -770,7 +770,7 @@
           {
             "name": "page",
             "in": "query",
-            "description": "Page number for pagination (defaults to 1)",
+            "description": "Page number for followers pagination (defaults to 1)",
             "required": false,
             "schema": {
               "type": "integer",
@@ -780,21 +780,11 @@
           {
             "name": "limit",
             "in": "query",
-            "description": "Number of followers to return per page (defaults to 10)",
+            "description": "Number of followers to return per page (defaults to 5)",
             "required": false,
             "schema": {
               "type": "integer",
-              "example": 10
-            }
-          },
-          {
-            "name": "recipePage",
-            "in": "query",
-            "description": "Page number for recipes pagination (defaults to 1)",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "example": 1
+              "example": 5
             }
           },
           {
@@ -822,117 +812,112 @@
                     "data": {
                       "type": "object",
                       "required": [
-                        "total",
+                        "followers",
                         "page",
                         "limit",
-                        "followers"
+                        "totalItem",
+                        "totalPage",
+                        "hasPreviousPage",
+                        "hasNextPage"
                       ],
                       "properties": {
-                        "total": {
-                          "description": "Total number of followers",
-                          "type": "integer",
-                          "example": 25
-                        },
-                        "page": {
-                          "description": "Current page number",
-                          "type": "integer",
-                          "example": 1
-                        },
-                        "limit": {
-                          "description": "Number of followers returned per page",
-                          "type": "integer",
-                          "example": 10
-                        },
                         "followers": {
                           "type": "array",
+                          "description": "List of followers",
                           "items": {
                             "type": "object",
                             "required": [
                               "id",
                               "name",
-                              "email",
-                              "avatarURL",
-                              "recipes"
+                              "avatar",
+                              "totalRecipes",
+                              "ownedRecipes"
                             ],
                             "properties": {
                               "id": {
-                                "description": "Follower's id",
                                 "type": "string",
-                                "example": "abc123"
+                                "description": "Follower's unique identifier",
+                                "example": "some ID"
                               },
                               "name": {
+                                "type": "string",
                                 "description": "Follower's name",
-                                "type": "string",
-                                "example": "Jane Doe"
+                                "example": "Example name"
                               },
-                              "email": {
-                                "description": "Follower's email",
-                                "type": "string",
-                                "example": "janedoe@gmail.com"
+                              "avatar": {
+                                "oneOf": [
+                                  {
+                                    "type": "string",
+                                    "description": "Follower's avatar URL",
+                                    "example": "http://example.com/avatar.jpg"
+                                  },
+                                  {
+                                    "type": "null",
+                                    "description": "Avatar can be null",
+                                    "example": null
+                                  }
+                                ]
                               },
-                              "avatarURL": {
-                                "description": "Follower's avatar URL",
+                              "totalRecipes": {
                                 "type": "string",
-                                "example": "http://example.com/avatar.jpg"
+                                "description": "Total number of recipes owned by the follower",
+                                "example": "1"
                               },
-                              "recipes": {
-                                "description": "Recipes owned by the follower",
-                                "type": "object",
-                                "required": [
-                                  "total",
-                                  "recipePage",
-                                  "recipeLimit",
-                                  "recipes"
-                                ],
-                                "properties": {
-                                  "total": {
-                                    "description": "Total number of recipes owned by the follower",
-                                    "type": "integer",
-                                    "example": 5
-                                  },
-                                  "recipePage": {
-                                    "description": "Current page number for recipes",
-                                    "type": "integer",
-                                    "example": 1
-                                  },
-                                  "recipeLimit": {
-                                    "description": "Number of recipes per page",
-                                    "type": "integer",
-                                    "example": 4
-                                  },
-                                  "recipes": {
-                                    "description": "List of recipes owned by the follower",
-                                    "type": "array",
-                                    "items": {
-                                      "type": "object",
-                                      "required": [
-                                        "id",
-                                        "name",
-                                        "description"
-                                      ],
-                                      "properties": {
-                                        "id": {
-                                          "description": "Recipe's id",
-                                          "type": "string",
-                                          "example": "recipe123"
-                                        },
-                                        "name": {
-                                          "description": "Recipe's name",
-                                          "type": "string",
-                                          "example": "Delicious Pasta"
-                                        },
-                                        "description": {
-                                          "description": "Recipe's description",
-                                          "type": "string",
-                                          "example": "A tasty pasta dish with garlic and olive oil."
-                                        }
-                                      }
+                              "ownedRecipes": {
+                                "type": "array",
+                                "description": "Preview of recipes owned by the follower",
+                                "items": {
+                                  "type": "object",
+                                  "required": [
+                                    "id",
+                                    "thumb"
+                                  ],
+                                  "properties": {
+                                    "id": {
+                                      "type": "string",
+                                      "description": "Recipe's unique identifier",
+                                      "example": "example id recipe"
+                                    },
+                                    "thumb": {
+                                      "type": "string",
+                                      "description": "Recipe's preview image URL",
+                                      "example": "http://example.com/recipe.jpg"
                                     }
                                   }
                                 }
                               }
                             }
                           }
+                        },
+                        "page": {
+                          "type": "integer",
+                          "description": "Current page number",
+                          "example": 1
+                        },
+                        "limit": {
+                          "type": "integer",
+                          "description": "Number of followers per page",
+                          "example": 5
+                        },
+                        "totalItem": {
+                          "type": "integer",
+                          "description": "Total number of followers",
+                          "example": 1
+                        },
+                        "totalPage": {
+                          "type": "integer",
+                          "description": "Total number of pages",
+                          "example": 1
+                        },
+                        "hasPreviousPage": {
+                          "type": "boolean",
+                          "description": "Indicates if there is a previous page",
+                          "example": false
+                        },
+                        "hasNextPage": {
+                          "type": "boolean",
+                          "description": "Indicates if there is a next page",
+                          "example": false
                         }
                       }
                     }
