@@ -35,16 +35,11 @@ responses:
                             type: object
                             required:
                                 - userId
-                                - unfollowerId
                             properties:
                                 userId:
                                     description: 'The ID of the user being unfollowed'
                                     type: string
                                     example: '671264281222679af8484a00'
-                                unfollowerId:
-                                    description: 'The ID of the user who is unfollowing'
-                                    type: string
-                                    example: 'abcdef1234567890'
     '400':
         description: 'Bad request: You cannot unfollow yourself'
     '404':

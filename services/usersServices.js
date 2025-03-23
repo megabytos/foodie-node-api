@@ -140,7 +140,8 @@ export async function unfollowUser(curentUser, userToUnfollow) {
     if (!follower) {
         throw HttpError(409, 'You are not following this user');
     }
-    return await follower.destroy();
+    await follower.destroy();
+    return { userId: userToUnfollow };
 }
 
 export async function getFollowData({
@@ -203,7 +204,7 @@ export async function getFollowers({ id, page = defaultPagination.page, limit = 
         recipeLimit,
         queryField: 'userId',
         alias: 'Follower',
-        resKey: 'followers'
+        resKey: 'followers',
     });
 }
 
