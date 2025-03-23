@@ -7,6 +7,7 @@ import HttpError from '../helpers/HttpError.js';
 import { nanoid } from 'nanoid';
 import saveToCloudinary from '../helpers/saveToCloudinary.js';
 import sequelize from '../db/sequelize.js';
+import calculatePaginationData from '../helpers/paginatoin/calculatePaginationData.js';
 
 const { JWT_SECRET } = process.env;
 
@@ -139,119 +140,82 @@ export async function unfollowUser(curentUser, userToUnfollow) {
     if (!follower) {
         throw HttpError(409, 'You are not following this user');
     }
-    return await follower.destroy();
+    await follower.destroy();
+    return { userId: userToUnfollow };
 }
 
-export async function getFollowers(userId, page = 1, limit = 10, recipePage = 1, recipeLimit = 4) {
+export async function getFollowData({
+    id,
+    queryField,
+    alias,
+    resKey,
+    page = defaultPagination.page,
+    limit = defaultPagination.limit,
+    recipeLimit = defaultPagination.recipeLimit,
+}) {
+    const user = await getUserById(id);
+    if (!user) {
+        throw HttpError(404, 'User not found');
+    }
     const offset = (page - 1) * limit;
-    const recipeOffset = (recipePage - 1) * recipeLimit;
-
-    const { count, rows } = await UserFollower.findAndCountAll({
-        where: { userId },
-        limit,
-        offset,
+    const { count, rows: data } = await UserFollower.findAndCountAll({
+        where: {
+            [queryField]: id,
+        },
+        attributes: [],
         include: [
             {
                 model: User,
-                as: 'Follower',
+                as: alias,
+                attributes: [
+                    'id',
+                    'name',
+                    'avatar',
+                    [sequelize.literal(`(SELECT COUNT(*) FROM "Recipes" WHERE "Recipes"."ownerId" = "${alias}"."id")`), 'totalRecipes'],
+                ],
+                include: [
+                    {
+                        model: Recipe,
+                        as: 'ownedRecipes',
+                        attributes: ['id', 'thumb'],
+                        limit: recipeLimit,
+                    },
+                ],
             },
         ],
-    });
-
-    const followerIds = rows.map(row => row.Follower.id);
-
-    const recipes = await Recipe.findAll({
-        where: { ownerId: followerIds },
-        limit: recipeLimit,
-        offset: recipeOffset,
-    });
-
-    const recipeCounts = await Recipe.findAll({
-        attributes: ['ownerId', [sequelize.fn('COUNT', sequelize.col('id')), 'total']],
-        where: { ownerId: followerIds },
-        group: ['ownerId'],
-    });
-
-    const recipeCountMap = recipeCounts.reduce((acc, item) => {
-        acc[item.ownerId] = item.dataValues.total;
-        return acc;
-    }, {});
-
-    const followers = rows.map(row => {
-        const user = row.Follower.toJSON();
-        const userRecipes = recipes.filter(recipe => recipe.ownerId === user.id);
-        return {
-            ...user,
-            recipes: {
-                total: recipeCountMap[user.id] || 0,
-                recipePage,
-                recipeLimit,
-                recipes: userRecipes,
-            },
-        };
-    });
-
-    return {
-        total: count,
-        page,
-        limit,
-        followers,
-    };
-}
-
-export async function getFollowedUsers(userId, page = 1, limit = 10, recipePage = 1, recipeLimit = 4) {
-    const offset = (page - 1) * limit;
-    const recipeOffset = (recipePage - 1) * recipeLimit;
-
-    const { count, rows } = await UserFollower.findAndCountAll({
-        where: { followerId: userId },
         limit,
         offset,
-        include: [
-            {
-                model: User,
-                as: 'User',
-            },
-        ],
+        order: [[{ model: User, as: alias }, 'id', 'ASC']],
+        distinct: true,
     });
+    const paginationData = calculatePaginationData(count, page, limit);
+    if (page > paginationData.totalPage || page < 1) {
+        throw HttpError(400, 'Page is out of range');
+    }
+    const formattedData = data?.map(item => item[alias]);
+    return formattedData.length > 0 ? { [resKey]: formattedData, ...paginationData } : { [resKey]: formattedData };
+}
 
-    const followedUserIds = rows.map(row => row.User.id);
-
-    const recipes = await Recipe.findAll({
-        where: { ownerId: followedUserIds },
-        limit: recipeLimit,
-        offset: recipeOffset,
-    });
-
-    const recipeCounts = await Recipe.findAll({
-        attributes: ['ownerId', [sequelize.fn('COUNT', sequelize.col('id')), 'total']],
-        where: { ownerId: followedUserIds },
-        group: ['ownerId'],
-    });
-
-    const recipeCountMap = recipeCounts.reduce((acc, item) => {
-        acc[item.ownerId] = item.dataValues.total;
-        return acc;
-    }, {});
-
-    const followedUsers = rows.map(row => {
-        const user = row.User.toJSON();
-        const userRecipes = recipes.filter(recipe => recipe.ownerId === user.id);
-        return {
-            ...user,
-            recipes: {
-                total: recipeCountMap[user.id] || 0,
-                recipePage,
-                recipeLimit,
-                recipes: userRecipes,
-            },
-        };
-    });
-
-    return {
-        total: count,
+export async function getFollowers({ id, page = defaultPagination.page, limit = defaultPagination.limit, recipeLimit = defaultPagination.recipeLimit }) {
+    return getFollowData({
+        id,
         page,
         limit,
-        followedUsers,
-    };
+        recipeLimit,
+        queryField: 'userId',
+        alias: 'Follower',
+        resKey: 'followers',
+    });
+}
+
+export async function getFollowedUsers({ id, page = defaultPagination.page, limit = defaultPagination.limit, recipeLimit = defaultPagination.recipeLimit }) {
+    return getFollowData({
+        id,
+        page,
+        limit,
+        recipeLimit,
+        queryField: 'followerId',
+        alias: 'User',
+        resKey: 'following',
+    });
 }

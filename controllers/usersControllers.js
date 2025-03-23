@@ -1,3 +1,4 @@
+import parsePaginationQuery from '../helpers/paginatoin/parsePaginationQuery.js';
 import * as service from '../services/usersServices.js';
 
 export const userRegisterController = async (req, res) => {
@@ -70,14 +71,20 @@ export const unfollowUserController = async (req, res) => {
 
 export const followersController = async (req, res) => {
     const { id } = req.params;
-    const { page = 1, limit = 10, recipePage = 1, recipeLimit = 4 } = req.query;
-    const data = await service.getFollowers(id, page, limit);
-    res.status(200).json({ data });
+    const { page, limit, recipeLimit } = parsePaginationQuery(req.query);
+    const data = await service.getFollowers({ id, page, limit, recipeLimit });
+    res.status(200).json({
+        message: 'Followers list of users found successfully',
+        data,
+    });
 };
 
 export const followingController = async (req, res) => {
     const { id } = req.user;
-    const { page = 1, limit = 10, recipePage = 1, recipeLimit = 4 } = req.query;
-    const data = await service.getFollowedUsers(id, page, limit, recipePage, recipeLimit);
-    res.status(200).json({ data });
+    const { page, limit, recipeLimit } = parsePaginationQuery(req.query);
+    const data = await service.getFollowedUsers({ id, page, limit, recipeLimit });
+    res.status(200).json({
+        message: 'Following list of users found successfully',
+        data,
+    });
 };
