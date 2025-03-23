@@ -47,7 +47,7 @@ User.belongsToMany(User, { as: 'Following', through: UserFollower, foreignKey: '
 UserFollower.belongsTo(User, { foreignKey: 'followerId', as: 'Follower' });
 UserFollower.belongsTo(User, { foreignKey: 'userId', as: 'User' });
 
-Recipe.hasMany(UserFavorite, { foreignKey: 'recipeId', onDelete: 'CASCADE' });
+Recipe.hasMany(UserFavorite, { foreignKey: 'recipeId', as: 'favorites', onDelete: 'CASCADE' });
 UserFavorite.belongsTo(Recipe, { foreignKey: 'recipeId', onDelete: 'CASCADE' });
 User.hasMany(UserFavorite, { foreignKey: 'userId', onDelete: 'CASCADE' });
 UserFavorite.belongsTo(User, { foreignKey: 'userId', onDelete: 'CASCADE' });
