@@ -1,9 +1,11 @@
 import { listRecipes, getRecipe, addRecipe, removeRecipe, updateRecipeById, getPopularRecipes, updateFavoriteStatus } from '../services/recipesServices.js';
+import { getCurrentUserData } from "../middlewares/authenticate.js";
 
 export const getAllRecipes = async (req, res) => {
-    const { id: owner } = req.user ? req.user : 0;
-    const { page = 1, limit = 20, favorite, category, ingredient, area } = req.query;
-    res.status(200).json(await listRecipes({ owner, page, limit, favorite, category, ingredient, area }));
+    const userData = getCurrentUserData(req);
+    const currentUserId = userData ? userData.id : null;
+    const { page = 1, limit = 20, favorite, category, ingredient, area, owner } = req.query;
+    res.status(200).json(await listRecipes({ page, limit, favorite, category, ingredient, area, owner, currentUserId }));
 };
 
 export const getOneRecipe = async (req, res) => {
