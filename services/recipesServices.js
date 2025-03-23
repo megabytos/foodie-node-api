@@ -39,7 +39,8 @@ export async function listRecipes({ page, limit, favorite, category, ingredient,
     const _limit = Number(limit) > 0 ? Number(limit) : 20;
     const _page = Number(page) > 1 ? Number(page) : 1;
     const offset = (_page - 1) * _limit;
-    const recipes = await Recipe.findAll({
+
+    const { count: total, rows: recipes } = await Recipe.findAndCountAll({
         attributes: { exclude: ['createdAt', 'updatedAt', 'instructions'] },
         where,
         include,
@@ -52,7 +53,7 @@ export async function listRecipes({ page, limit, favorite, category, ingredient,
         delete recipe.dataValues.User;
         delete recipe.dataValues.favorites;
     });
-    return recipes;
+    return {total, recipes};
 }
 
 export async function getRecipe(query) {
