@@ -78,7 +78,7 @@ export const followersController = async (req, res) => {
 
 export const followingController = async (req, res) => {
     const { id } = req.user;
-    const { page = 1, limit = 10, recipePage = 1, recipeLimit = 4 } = req.query;
-    const data = await service.getFollowedUsers(id, page, limit, recipePage, recipeLimit);
+    const { page, limit, recipeLimit } = parsePaginationQuery(req.query);
+    const data = await service.getFollowedUsers({ id, page, limit, recipeLimit });
     res.status(200).json({ data });
 };

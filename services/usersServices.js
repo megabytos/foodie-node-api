@@ -143,26 +143,33 @@ export async function unfollowUser(curentUser, userToUnfollow) {
     return await follower.destroy();
 }
 
-export async function getFollowers({ id, page = defaultPagination.page, limit = defaultPagination.limit, recipeLimit = defaultPagination.recipeLimit }) {
+export async function getFollowData({
+    id,
+    queryField,
+    alias,
+    page = defaultPagination.page,
+    limit = defaultPagination.limit,
+    recipeLimit = defaultPagination.recipeLimit,
+}) {
     const user = await getUserById(id);
     if (!user) {
         throw HttpError(404, 'User not found');
     }
     const offset = (page - 1) * limit;
-    const { count, rows: followers } = await UserFollower.findAndCountAll({
+    const { count, rows: data } = await UserFollower.findAndCountAll({
         where: {
-            userId: id,
+            [queryField]: id,
         },
         attributes: [],
         include: [
             {
                 model: User,
-                as: 'Follower',
+                as: alias,
                 attributes: [
                     'id',
                     'name',
                     'avatar',
-                    [sequelize.literal(`(SELECT COUNT(*) FROM "Recipes" WHERE "Recipes"."ownerId" = "Follower"."id")`), 'totalRecipes'],
+                    [sequelize.literal(`(SELECT COUNT(*) FROM "Recipes" WHERE "Recipes"."ownerId" = "${alias}"."id")`), 'totalRecipes'],
                 ],
                 include: [
                     {
@@ -176,68 +183,36 @@ export async function getFollowers({ id, page = defaultPagination.page, limit = 
         ],
         limit,
         offset,
+        order: [[{ model: User, as: alias }, 'id', 'ASC']],
+        distinct: true,
     });
     const paginationData = calculatePaginationData(count, page, limit);
     if (page > paginationData.totalPage || page < 1) {
         throw HttpError(400, 'Page is out of range');
     }
-    const formattedFollowers = followers?.map(follower => follower.Follower);
+    const formattedFollowers = data?.map(follower => follower[alias]);
     return formattedFollowers.length > 0 ? { followers: formattedFollowers, ...paginationData } : { followers: formattedFollowers };
 }
 
-export async function getFollowedUsers(userId, page = 1, limit = 10, recipePage = 1, recipeLimit = 4) {
-    const offset = (page - 1) * limit;
-    const recipeOffset = (recipePage - 1) * recipeLimit;
-
-    const { count, rows } = await UserFollower.findAndCountAll({
-        where: { followerId: userId },
-        limit,
-        offset,
-        include: [
-            {
-                model: User,
-                as: 'User',
-            },
-        ],
-    });
-
-    const followedUserIds = rows.map(row => row.User.id);
-
-    const recipes = await Recipe.findAll({
-        where: { ownerId: followedUserIds },
-        limit: recipeLimit,
-        offset: recipeOffset,
-    });
-
-    const recipeCounts = await Recipe.findAll({
-        attributes: ['ownerId', [sequelize.fn('COUNT', sequelize.col('id')), 'total']],
-        where: { ownerId: followedUserIds },
-        group: ['ownerId'],
-    });
-
-    const recipeCountMap = recipeCounts.reduce((acc, item) => {
-        acc[item.ownerId] = item.dataValues.total;
-        return acc;
-    }, {});
-
-    const followedUsers = rows.map(row => {
-        const user = row.User.toJSON();
-        const userRecipes = recipes.filter(recipe => recipe.ownerId === user.id);
-        return {
-            ...user,
-            recipes: {
-                total: recipeCountMap[user.id] || 0,
-                recipePage,
-                recipeLimit,
-                recipes: userRecipes,
-            },
-        };
-    });
-
-    return {
-        total: count,
+export async function getFollowers({ id, page = defaultPagination.page, limit = defaultPagination.limit, recipeLimit = defaultPagination.recipeLimit }) {
+    return getFollowData({
+        id,
         page,
         limit,
-        followedUsers,
-    };
+        recipeLimit,
+        queryField: 'userId',
+        alias: 'Follower',
+    });
+}
+
+export async function getFollowedUsers({ id, page = defaultPagination.page, limit = defaultPagination.limit, recipeLimit = defaultPagination.recipeLimit }) {
+    const myId = 'n1K4sYoNxLseVqx140W8u';
+    return getFollowData({
+        id: myId,
+        page,
+        limit,
+        recipeLimit,
+        queryField: 'followerId',
+        alias: 'User',
+    });
 }
