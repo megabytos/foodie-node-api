@@ -800,9 +800,15 @@
                 "schema": {
                   "type": "object",
                   "required": [
+                    "message",
                     "data"
                   ],
                   "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Response message",
+                      "example": "Followers list of users found successfully"
+                    },
                     "data": {
                       "type": "object",
                       "required": [
@@ -988,110 +994,124 @@
                 "schema": {
                   "type": "object",
                   "required": [
-                    "following",
-                    "page",
-                    "limit",
-                    "totalItem",
-                    "totalPage",
-                    "hasPreviousPage",
-                    "hasNextPage"
+                    "message",
+                    "data"
                   ],
                   "properties": {
-                    "following": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "required": [
-                          "id",
-                          "name",
-                          "avatar",
-                          "totalRecipes",
-                          "ownedRecipes"
-                        ],
-                        "properties": {
-                          "id": {
-                            "description": "User's id",
-                            "type": "string",
-                            "example": "example user id"
-                          },
-                          "name": {
-                            "description": "User's name",
-                            "type": "string",
-                            "example": "Example user name"
-                          },
-                          "avatar": {
-                            "oneOf": [
-                              {
+                    "message": {
+                      "type": "string",
+                      "description": "Response message",
+                      "example": "Following list of users found successfully"
+                    },
+                    "data": {
+                      "type": "object",
+                      "required": [
+                        "following",
+                        "page",
+                        "limit",
+                        "totalItem",
+                        "totalPage",
+                        "hasPreviousPage",
+                        "hasNextPage"
+                      ],
+                      "properties": {
+                        "following": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "required": [
+                              "id",
+                              "name",
+                              "avatar",
+                              "totalRecipes",
+                              "ownedRecipes"
+                            ],
+                            "properties": {
+                              "id": {
+                                "description": "User's id",
                                 "type": "string",
-                                "description": "Follower's avatar URL",
-                                "example": "http://example.com/avatar.jpg"
+                                "example": "example user id"
                               },
-                              {
-                                "type": "null",
-                                "description": "Avatar can be null",
-                                "example": null
-                              }
-                            ]
-                          },
-                          "totalRecipes": {
-                            "description": "Total number of recipes for this followed user",
-                            "type": "string",
-                            "example": "1"
-                          },
-                          "ownedRecipes": {
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "required": [
-                                "id",
-                                "thumb"
-                              ],
-                              "properties": {
-                                "id": {
-                                  "description": "Recipe's id",
-                                  "type": "string",
-                                  "example": "Example recipe id"
-                                },
-                                "thumb": {
-                                  "description": "Recipe's thumbnail URL",
-                                  "type": "string",
-                                  "example": "http://example.com/recipe.jpg"
+                              "name": {
+                                "description": "User's name",
+                                "type": "string",
+                                "example": "Example user name"
+                              },
+                              "avatar": {
+                                "oneOf": [
+                                  {
+                                    "type": "string",
+                                    "description": "User's avatar URL",
+                                    "example": "http://example.com/avatar.jpg"
+                                  },
+                                  {
+                                    "type": "null",
+                                    "description": "Avatar can be null",
+                                    "example": null
+                                  }
+                                ]
+                              },
+                              "totalRecipes": {
+                                "description": "Total number of recipes for this followed user",
+                                "type": "string",
+                                "example": "1"
+                              },
+                              "ownedRecipes": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "required": [
+                                    "id",
+                                    "thumb"
+                                  ],
+                                  "properties": {
+                                    "id": {
+                                      "description": "Recipe's id",
+                                      "type": "string",
+                                      "example": "Example recipe id"
+                                    },
+                                    "thumb": {
+                                      "description": "Recipe's thumbnail URL",
+                                      "type": "string",
+                                      "example": "http://example.com/recipe.jpg"
+                                    }
+                                  }
                                 }
                               }
                             }
                           }
+                        },
+                        "page": {
+                          "description": "Current page number for followed users",
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "limit": {
+                          "description": "Number of followed users per page",
+                          "type": "integer",
+                          "example": 5
+                        },
+                        "totalItem": {
+                          "description": "Total number of followed users",
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "totalPage": {
+                          "description": "Total number of pages",
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "hasPreviousPage": {
+                          "description": "Indicates if there is a previous page",
+                          "type": "boolean",
+                          "example": false
+                        },
+                        "hasNextPage": {
+                          "description": "Indicates if there is a next page",
+                          "type": "boolean",
+                          "example": false
                         }
                       }
-                    },
-                    "page": {
-                      "description": "Current page number for followed users",
-                      "type": "integer",
-                      "example": 1
-                    },
-                    "limit": {
-                      "description": "Number of followed users per page",
-                      "type": "integer",
-                      "example": 5
-                    },
-                    "totalItem": {
-                      "description": "Total number of followed users",
-                      "type": "integer",
-                      "example": 1
-                    },
-                    "totalPage": {
-                      "description": "Total number of pages",
-                      "type": "integer",
-                      "example": 1
-                    },
-                    "hasPreviousPage": {
-                      "description": "Indicates if there is a previous page",
-                      "type": "boolean",
-                      "example": false
-                    },
-                    "hasNextPage": {
-                      "description": "Indicates if there is a next page",
-                      "type": "boolean",
-                      "example": false
                     }
                   }
                 }

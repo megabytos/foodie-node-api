@@ -73,12 +73,18 @@ export const followersController = async (req, res) => {
     const { id } = req.params;
     const { page, limit, recipeLimit } = parsePaginationQuery(req.query);
     const data = await service.getFollowers({ id, page, limit, recipeLimit });
-    res.status(200).json({ data });
+    res.status(200).json({
+        message: 'Followers list of users found successfully',
+        data,
+    });
 };
 
 export const followingController = async (req, res) => {
     const { id } = req.user;
     const { page, limit, recipeLimit } = parsePaginationQuery(req.query);
     const data = await service.getFollowedUsers({ id, page, limit, recipeLimit });
-    res.status(200).json({ data });
+    res.status(200).json({
+        message: 'Following list of users found successfully',
+        data,
+    });
 };

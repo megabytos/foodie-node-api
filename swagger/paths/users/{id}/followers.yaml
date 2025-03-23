@@ -45,8 +45,13 @@ responses:
                 schema:
                     type: object
                     required:
+                        - message
                         - data
                     properties:
+                        message:
+                            type: string
+                            description: 'Response message'
+                            example: 'Followers list of users found successfully'
                         data:
                             type: object
                             required:
@@ -82,9 +87,9 @@ responses:
                                                 oneOf:
                                                     - type: string
                                                       description: "Follower's avatar URL"
-                                                      example: "http://example.com/avatar.jpg"
-                                                    - type: "null"
-                                                      description: "Avatar can be null"
+                                                      example: 'http://example.com/avatar.jpg'
+                                                    - type: 'null'
+                                                      description: 'Avatar can be null'
                                                       example: null
                                             totalRecipes:
                                                 type: string
