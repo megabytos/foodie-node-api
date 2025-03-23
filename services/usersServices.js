@@ -147,6 +147,7 @@ export async function getFollowData({
     id,
     queryField,
     alias,
+    resKey,
     page = defaultPagination.page,
     limit = defaultPagination.limit,
     recipeLimit = defaultPagination.recipeLimit,
@@ -190,8 +191,8 @@ export async function getFollowData({
     if (page > paginationData.totalPage || page < 1) {
         throw HttpError(400, 'Page is out of range');
     }
-    const formattedFollowers = data?.map(follower => follower[alias]);
-    return formattedFollowers.length > 0 ? { followers: formattedFollowers, ...paginationData } : { followers: formattedFollowers };
+    const formattedData = data?.map(item => item[alias]);
+    return formattedData.length > 0 ? { [resKey]: formattedData, ...paginationData } : { [resKey]: formattedData };
 }
 
 export async function getFollowers({ id, page = defaultPagination.page, limit = defaultPagination.limit, recipeLimit = defaultPagination.recipeLimit }) {
@@ -202,17 +203,18 @@ export async function getFollowers({ id, page = defaultPagination.page, limit = 
         recipeLimit,
         queryField: 'userId',
         alias: 'Follower',
+        resKey: 'followers'
     });
 }
 
 export async function getFollowedUsers({ id, page = defaultPagination.page, limit = defaultPagination.limit, recipeLimit = defaultPagination.recipeLimit }) {
-    const myId = 'n1K4sYoNxLseVqx140W8u';
     return getFollowData({
-        id: myId,
+        id,
         page,
         limit,
         recipeLimit,
         queryField: 'followerId',
         alias: 'User',
+        resKey: 'following',
     });
 }
