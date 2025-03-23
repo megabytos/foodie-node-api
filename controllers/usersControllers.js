@@ -1,3 +1,4 @@
+import parsePaginationQuery from '../helpers/paginatoin/parsePaginationQuery.js';
 import * as service from '../services/usersServices.js';
 
 export const userRegisterController = async (req, res) => {
@@ -70,8 +71,8 @@ export const unfollowUserController = async (req, res) => {
 
 export const followersController = async (req, res) => {
     const { id } = req.params;
-    const { page = 1, limit = 10, recipePage = 1, recipeLimit = 4 } = req.query;
-    const data = await service.getFollowers(id, page, limit);
+    const { page, limit, recipeLimit } = parsePaginationQuery(req.query);
+    const data = await service.getFollowers({ id, page, limit, recipeLimit });
     res.status(200).json({ data });
 };
 
