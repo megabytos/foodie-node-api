@@ -192,7 +192,7 @@ export async function getFollowData({
         where: {
             [queryField]: id,
         },
-        attributes: [],
+        attributes: ['userId', 'followerId'],
         include: [
             {
                 model: User,
@@ -201,7 +201,27 @@ export async function getFollowData({
                     'id',
                     'name',
                     'avatar',
-                    [sequelize.literal(`(SELECT COUNT(*) FROM "Recipes" WHERE "Recipes"."ownerId" = "${alias}"."id")`), 'totalRecipes'],
+                    [
+                        sequelize.literal(`
+                            (SELECT COUNT(*) 
+                             FROM "Recipes" 
+                             WHERE "Recipes"."ownerId" = "${alias}"."id")
+                        `),
+                        'totalRecipes',
+                    ],
+                    ...(alias === 'Follower'
+                        ? [
+                              [
+                                  sequelize.literal(`
+                                    (SELECT COUNT(*) 
+                                     FROM "UserFollowers" AS uf 
+                                     WHERE uf."userId" = "${alias}"."id" 
+                                     AND uf."followerId" = :userId)
+                                `),
+                                  'following',
+                              ],
+                          ]
+                        : []),
                 ],
                 include: [
                     {
@@ -216,13 +236,22 @@ export async function getFollowData({
         limit,
         offset,
         order: [[{ model: User, as: alias }, 'id', 'ASC']],
-        distinct: true,
+        replacements: { userId: id },
     });
+    
     const paginationData = calculatePaginationData(count, page, limit);
     if (page > paginationData.totalPage || page < 1) {
         throw HttpError(400, 'Page is out of range');
     }
-    const formattedData = data?.map(item => item[alias]);
+    const formattedData = data?.map(item => {
+        if (alias === 'Follower') {
+            const follower = item[alias];
+            follower.following = Boolean(parseInt(follower.following) > 0);
+            return follower;
+        } else {
+            return item[alias];
+        }
+    });
     return formattedData.length > 0 ? { [resKey]: formattedData, ...paginationData } : { [resKey]: formattedData };
 }
 
