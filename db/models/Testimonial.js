@@ -19,4 +19,9 @@ const Testimonial = sequelize.define('Testimonial', {
     }
 });
 
+Testimonial.associate = (models) => {
+  Testimonial.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
+};
+
+
 export default Testimonial;
