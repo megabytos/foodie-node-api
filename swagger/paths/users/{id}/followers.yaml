@@ -73,16 +73,17 @@ responses:
                                             - name
                                             - avatar
                                             - totalRecipes
+                                            - following
                                             - ownedRecipes
                                         properties:
                                             id:
                                                 type: string
                                                 description: "Follower's unique identifier"
-                                                example: 'some ID'
+                                                example: 'follower id'
                                             name:
                                                 type: string
                                                 description: "Follower's name"
-                                                example: 'Example name'
+                                                example: 'Follower name'
                                             avatar:
                                                 oneOf:
                                                     - type: string
@@ -94,7 +95,11 @@ responses:
                                             totalRecipes:
                                                 type: string
                                                 description: 'Total number of recipes owned by the follower'
-                                                example: '1'
+                                                example: '3'
+                                            following:
+                                                type: string
+                                                description: 'Indicates if the user is following the given follower'
+                                                example: '0'  # 0 for not following, 1 for following
                                             ownedRecipes:
                                                 type: array
                                                 description: 'Preview of recipes owned by the follower'
@@ -107,11 +112,11 @@ responses:
                                                         id:
                                                             type: string
                                                             description: "Recipe's unique identifier"
-                                                            example: 'example id recipe'
+                                                            example: 'recipe ID'
                                                         thumb:
                                                             type: string
                                                             description: "Recipe's preview image URL"
-                                                            example: 'http://example.com/recipe.jpg'
+                                                            example: 'http://example.com/recipe.jpgg'
                                 page:
                                     type: integer
                                     description: 'Current page number'

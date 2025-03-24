@@ -1,3 +1,4 @@
+import { generateAuthUrl } from '../helpers/googleOAuth.js';
 import parsePaginationQuery from '../helpers/paginatoin/parsePaginationQuery.js';
 import * as service from '../services/usersServices.js';
 
@@ -13,6 +14,22 @@ export const userLoginController = async (req, res) => {
     const data = await service.loginUser(req.body);
     res.status(200).json({
         message: 'User successfully log in',
+        data,
+    });
+};
+
+export const userGoogleOAuthController = async (req, res) => {
+    const url = await generateAuthUrl();
+    res.json({
+        message: 'Successfully requested oauth url',
+        data: { url },
+    });
+};
+
+export const loginAndRegisterWithGoogleOAuthController = async (req, res) => {
+    const data = await service.getUserGoogleOAuth(req.body.code);
+    res.status(200).json({
+        message: 'Successfully logged in via Google OAuth.',
         data,
     });
 };

@@ -26,3 +26,10 @@ export const userLoginSchema = Joi.object({
 export const emailVerificationSchema = Joi.object({
     email: Joi.string().pattern(emailRegexp).message('Email must must be in valid format').required(),
 });
+
+export const loginWithGoogleOAuthSchema = Joi.object({
+    code: Joi.string().required().messages({
+        'any.required': 'Code is required.',
+        'string.empty': 'Code cannot be empty.',
+    }),
+});

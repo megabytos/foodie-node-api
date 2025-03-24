@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import { randomBytes } from 'crypto';
 import jwt from 'jsonwebtoken';
 import User from '../db/models/User.js';
 import UserFollower from '../db/models/UserFollower.js';
@@ -8,6 +9,7 @@ import { nanoid } from 'nanoid';
 import saveToCloudinary from '../helpers/saveToCloudinary.js';
 import sequelize from '../db/sequelize.js';
 import calculatePaginationData from '../helpers/paginatoin/calculatePaginationData.js';
+import { getNameFromGoogleTokenPayload, validateCode } from '../helpers/googleOAuth.js';
 
 const { JWT_SECRET } = process.env;
 
@@ -57,6 +59,34 @@ export async function loginUser(data) {
             avatarURL: user.avatar,
         },
         token,
+    };
+}
+
+export async function getUserGoogleOAuth(code) {
+    const loginTicket = await validateCode(code);
+    const { payload } = loginTicket;
+    if (!payload) throw HttpError(401, 'Not authorized');
+    let user = await getUser({ email: payload.email });
+    if (!user) {
+        const pas = randomBytes(10);
+        const password = await bcrypt.hash(pas, 10);
+        user = await User.create({
+            email: payload.email,
+            name: getNameFromGoogleTokenPayload(payload),
+            avatar: payload.picture,
+            password,
+        });
+    }
+    const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '24h' });
+    await user.update({ token }, { returning: true });
+    return {
+        user: {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            avatarURL: user.avatar,
+        },
+        token: user.token,
     };
 }
 
@@ -162,7 +192,7 @@ export async function getFollowData({
         where: {
             [queryField]: id,
         },
-        attributes: [],
+        attributes: ['userId', 'followerId'],
         include: [
             {
                 model: User,
@@ -171,7 +201,27 @@ export async function getFollowData({
                     'id',
                     'name',
                     'avatar',
-                    [sequelize.literal(`(SELECT COUNT(*) FROM "Recipes" WHERE "Recipes"."ownerId" = "${alias}"."id")`), 'totalRecipes'],
+                    [
+                        sequelize.literal(`
+                            (SELECT COUNT(*) 
+                             FROM "Recipes" 
+                             WHERE "Recipes"."ownerId" = "${alias}"."id")
+                        `),
+                        'totalRecipes',
+                    ],
+                    ...(alias === 'Follower'
+                        ? [
+                              [
+                                  sequelize.literal(`
+                                    (SELECT COUNT(*) 
+                                     FROM "UserFollowers" AS uf 
+                                     WHERE uf."userId" = "${alias}"."id" 
+                                     AND uf."followerId" = :userId)
+                                `),
+                                  'following',
+                              ],
+                          ]
+                        : []),
                 ],
                 include: [
                     {
@@ -186,13 +236,22 @@ export async function getFollowData({
         limit,
         offset,
         order: [[{ model: User, as: alias }, 'id', 'ASC']],
-        distinct: true,
+        replacements: { userId: id },
     });
+    
     const paginationData = calculatePaginationData(count, page, limit);
     if (page > paginationData.totalPage || page < 1) {
         throw HttpError(400, 'Page is out of range');
     }
-    const formattedData = data?.map(item => item[alias]);
+    const formattedData = data?.map(item => {
+        if (alias === 'Follower') {
+            const follower = item[alias];
+            follower.following = Boolean(parseInt(follower.following) > 0);
+            return follower;
+        } else {
+            return item[alias];
+        }
+    });
     return formattedData.length > 0 ? { [resKey]: formattedData, ...paginationData } : { [resKey]: formattedData };
 }
 
