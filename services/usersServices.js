@@ -139,7 +139,7 @@ export async function updateAvatar(id, file, folderName) {
         await user.update({ avatar }, { returning: true });
         return { id: user.id, avatarURL: user.avatar };
     } catch (error) {
-        throw HttpError(500, 'Error during the saving user avatar in DB:');
+        throw HttpError(500, 'Error during the saving user avatar in DB');
     }
 }
 
@@ -238,7 +238,7 @@ export async function getFollowData({
         order: [[{ model: User, as: alias }, 'id', 'ASC']],
         replacements: { userId: id },
     });
-    
+
     const paginationData = calculatePaginationData(count, page, limit);
     if (page > paginationData.totalPage || page < 1) {
         throw HttpError(400, 'Page is out of range');

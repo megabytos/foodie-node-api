@@ -4,6 +4,7 @@ import {createRecipeSchema, updateRecipeSchema, updateStatusRecipeSchema} from "
 import validateBody from "../helpers/validateBody.js";
 import controllerWrapper from "../helpers/controllerWrapper.js";
 import auth from "../middlewares/authenticate.js";
+import upload from "../middlewares/upload.js";
 
 const recipesRouter = express.Router();
 
@@ -15,7 +16,7 @@ recipesRouter.get("/:id", controllerWrapper(getOneRecipe));
 
 recipesRouter.delete("/:id", auth, controllerWrapper(deleteRecipe));
 
-recipesRouter.post("/", auth, validateBody(createRecipeSchema), controllerWrapper(createRecipe));
+recipesRouter.post("/", auth, upload.single('thumb'), validateBody(createRecipeSchema), controllerWrapper(createRecipe));
 
 recipesRouter.put("/:id", auth, validateBody(updateRecipeSchema), controllerWrapper(updateRecipe));
 
