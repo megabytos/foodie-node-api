@@ -4,6 +4,7 @@ import sequelize from '../db/sequelize.js';
 import { Sequelize } from 'sequelize';
 
 import { Ingredient, Area, Category, User, UserFavorite, RecipeIngredient } from '../db/models/index.js';
+import calculatePaginationData from '../helpers/paginatoin/calculatePaginationData.js';
 
 export async function listRecipes({ page, limit, favorite, category, ingredient, area, owner, currentUserId}) {
     const where = {};
@@ -54,7 +55,11 @@ export async function listRecipes({ page, limit, favorite, category, ingredient,
         delete recipe.dataValues.User;
         delete recipe.dataValues.favorites;
     });
-    return {total, recipes};
+     const paginationData = calculatePaginationData(total, _page, _limit);
+     if (page > paginationData.totalPage || page < 1) {
+         throw HttpError(400, 'Page is out of range');
+     }
+     return recipes?.length > 0 ? { recipes, ...paginationData } : { recipes };
 }
 
 export async function getRecipe(query) {

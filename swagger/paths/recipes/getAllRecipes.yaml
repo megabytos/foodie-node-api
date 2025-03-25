@@ -27,7 +27,7 @@ parameters:
     required: false
     schema:
       type: string
-      example: '64c8d958249fae54bae90bb9'
+      example: 'user Id'
   - in: query
     name: category
     description: The category ID to filter recipes
@@ -55,57 +55,106 @@ responses:
     content:
       application/json:
         schema:
-          type: array
-          items:
-            type: object
-            required:
-              - id
-              - title
-              - categoryId
-              - ownerId
-              - areaId
-              - instructions
-              - description
-              - time
-              - thumb
-            properties:
-              id:
-                description: 'Unique identifier for the recipe'
-                type: string
-                example: 'recipe-id'
-              title:
-                description: 'Title of the recipe'
-                type: string
-                example: 'Grilled Squid'
-              categoryId:
-                description: 'Category ID the recipe belongs to'
-                type: string
-                example: 'category-id'
-              ownerId:
-                description: 'ID of the user who owns the recipe'
-                type: string
-                example: 'user-id'
-              areaId:
-                description: 'Area ID the recipe belongs to'
-                type: string
-                example: 'area-id'
-              instructions:
-                description: 'Step-by-step cooking instructions'
-                type: string
-                example: 'Step 1: Prepare the squid...'
-              description:
-                description: 'Brief description of the recipe'
-                type: string
-                example: 'A delicious grilled squid recipe for seafood lovers.'
-              time:
-                description: 'Time (in minutes) required to prepare the recipe'
-                type: integer
-                example: 30
-              thumb:
-                description: 'Thumbnail image URL for the recipe'
-                type: string
-                example: 'https://example.com/recipe-thumbnail.jpg'
+          type: object
+          required:
+            - recipes
+            - page
+            - limit
+            - totalItem
+            - totalPage
+            - hasPreviousPage
+            - hasNextPage
+          properties:
+            recipes:
+              type: array
+              description: 'List of retrieved recipes'
+              items:
+                type: object
+                required:
+                  - id
+                  - title
+                  - categoryId
+                  - ownerId
+                  - areaId
+                  - description
+                  - time
+                  - thumb
+                  - ownerName
+                  - ownerAvatar
+                  - isFavorite
+                properties:
+                  id:
+                    description: 'Unique identifier for the recipe'
+                    type: string
+                    example: 'recipe id'
+                  title:
+                    description: 'Title of the recipe'
+                    type: string
+                    example: 'Battenberg Cake'
+                  categoryId:
+                    description: 'Category ID the recipe belongs to'
+                    type: string
+                    example: 'category id'
+                  ownerId:
+                    description: 'ID of the user who owns the recipe'
+                    type: string
+                    example: 'owner id'
+                  areaId:
+                    description: 'Area ID the recipe belongs to'
+                    type: string
+                    example: 'area id'
+                  description:
+                    description: 'Brief description of the recipe'
+                    type: string
+                    example: 'A classic British cake made with almond sponge cake and covered with marzipan.'
+                  time:
+                    description: 'Time (in minutes) required to prepare the recipe'
+                    type: integer
+                    example: 60
+                  thumb:
+                    description: 'Thumbnail image URL for the recipe'
+                    type: string
+                    example: 'https://example.com/recipe.jpg'
+                  ownerName:
+                    description: 'Name of the recipe owner'
+                    type: string
+                    example: 'Owner name'
+                  ownerAvatar:
+                    description: "Owner's avatar URL or null"
+                    oneOf:
+                      - type: string
+                        example: 'https://example.com/avatar.jpg'
+                      - type: 'null'
+                        example: null
+                  isFavorite:
+                    description: 'Indicates if the recipe is marked as favorite by the user'
+                    type: boolean
+                    example: false
+            page:
+              type: integer
+              description: 'Current page number'
+              example: 1
+            limit:
+              type: integer
+              description: 'Number of recipes per page'
+              example: 20
+            totalItem:
+              type: integer
+              description: 'Total number of recipes available'
+              example: 1
+            totalPage:
+              type: integer
+              description: 'Total number of pages available'
+              example: 1
+            hasPreviousPage:
+              type: boolean
+              description: 'Indicates if there is a previous page'
+              example: false
+            hasNextPage:
+              type: boolean
+              description: 'Indicates if there is a next page'
+              example: false
   '400':
-        description: 'Bad request'
+    description: 'Bad request'
   '500':
     $ref: '../../components/responses/500.yaml'
