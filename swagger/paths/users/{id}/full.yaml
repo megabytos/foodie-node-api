@@ -20,6 +20,7 @@ description: |
       - `avatarURL`
       - `totalRecipes`
       - `totalFollowers`
+      - `isFollowing`
 operationId: getUserFullDetails
 security:
     - bearerAuth: []
@@ -89,6 +90,10 @@ responses:
                                     description: 'Total number of favorite recipes of the user'
                                     type: integer
                                     example: 5
+                                isFollowing:
+                                    description: 'Indicates whether the current user follows this user'
+                                    type: boolean
+                                    example: false
     '400':
         description: 'Bad request: Missing user ID parameter'
     '401':

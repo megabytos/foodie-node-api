@@ -116,6 +116,9 @@ export const userFullDetails = async (userId, loggedInUserId) => {
             ...(userId === loggedInUserId
                 ? [[sequelize.literal(`(SELECT COUNT(*) FROM "UserFavorites" WHERE "UserFavorites"."userId" = "User"."id")`), 'totalFavoriteRecipes']]
                 : []),
+            ...(userId !== loggedInUserId
+                ? [[sequelize.literal(`(SELECT COUNT(*) > 0 FROM "UserFollowers" WHERE "userId" = "User"."id" AND "followerId" = '${loggedInUserId}')`),'isFollowing', ]]
+                : []),
         ],
     });
 
