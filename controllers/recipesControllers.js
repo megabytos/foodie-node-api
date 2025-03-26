@@ -3,10 +3,11 @@ import {
     getRecipe,
     addRecipe,
     removeRecipe,
-    updateRecipeById,
     getPopularRecipes,
-    updateFavoriteStatus,
     getUserOwnRecipes,
+    removeFromFavorite,
+    addToFavorite,
+    getUserFavoriteRecipes,
 } from '../services/recipesServices.js';
 import { getCurrentUserData } from '../middlewares/authenticate.js';
 
@@ -45,13 +46,6 @@ export const createRecipe = async (req, res) => {
     res.status(201).json(recipe);
 };
 
-export const updateRecipe = async (req, res) => {
-    const { id: owner } = req.user;
-    const { id } = req.params;
-    const recipe = await updateRecipeById({ id, owner }, req.body);
-    res.status(200).json(recipe);
-};
-
 export const popularRecipes = async (req, res) => {
     const userData = getCurrentUserData(req);
     const currentUserId = userData ? userData.id : null;
@@ -60,11 +54,26 @@ export const popularRecipes = async (req, res) => {
     res.status(200).json(recipes);
 };
 
-export const updateFavoriteController = async (req, res) => {
+export const getUserFavoriteRecipesController = async (req, res) => {
+    const { id } = req.user;
+    const { id: ownerId } = req.params;
+    let userId = id;
+    if (ownerId) userId = ownerId;
+    const { page = 1, limit = 20 } = req.query;
+    const recipes = await getUserFavoriteRecipes({ userId, page, limit });
+    res.status(200).json(recipes);
+};
+
+export const addToFavoriteController = async (req, res) => {
     const { id: userId } = req.user;
     const { id: recipeId } = req.params;
-    const { favorite } = req.body;
+    const result = await addToFavorite(userId, recipeId);
+    res.status(200).json(result);
+};
 
-    const result = await updateFavoriteStatus(userId, recipeId, favorite);
+export const removeFromFavoriteController = async (req, res) => {
+    const { id: userId } = req.user;
+    const { id: recipeId } = req.params;
+    const result = await removeFromFavorite(userId, recipeId);
     res.status(200).json(result);
 };

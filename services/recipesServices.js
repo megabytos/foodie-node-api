@@ -226,20 +226,16 @@ export async function getPopularRecipes(limit = 10, currentUserId) {
     return recipes;
 }
 
-export async function updateFavoriteStatus(userId, recipeId, favorite) {
+export async function addToFavorite(userId, recipeId) {
     const exists = await UserFavorite.findOne({ where: { userId, recipeId } });
+    if (exists) throw HttpError(400, 'Recipe is already in favorite');
+    return await UserFavorite.create({ userId, recipeId });
+}
 
-    if (favorite) {
-        if (!exists) {
-            await UserFavorite.create({ userId, recipeId });
-        }
-    } else {
-        if (exists) {
-            await UserFavorite.destroy({ where: { userId, recipeId } });
-        }
-    }
-
-    return { recipeId, favorite };
+export async function removeFromFavorite(userId, recipeId) {
+    const exists = await UserFavorite.findOne({ where: { userId, recipeId } });
+    if (!exists) throw HttpError(400, 'Recipe is not in favorite');
+    return exists.destroy();
 }
 
 export async function getUserOwnRecipes({ ownerId, page = 1, limit = 10, currentUserId = null }) {
@@ -305,4 +301,78 @@ export async function getUserOwnRecipes({ ownerId, page = 1, limit = 10, current
         throw HttpError(400, 'Page is out of range');
     }
     return formattedRecipes?.length > 0 ? { recipes: formattedRecipes, ...paginationData } : { recipes: formattedRecipes };
+}
+
+
+export async function getUserFavoriteRecipes({ userId, page = 1, limit = 10, includeIngredients = true }) {
+    const _limit = Number(limit) > 0 ? Number(limit) : 20;
+    const _page = Number(page) > 1 ? Number(page) : 1;
+    const offset = (_page - 1) * _limit;
+
+    const queryOptions = {
+        attributes: ['id', 'title', 'description', 'time', 'thumb', 'createdAt'],
+        include: [
+            {
+                model: UserFavorite,
+                as: 'favorites',
+                where: { userId },
+                attributes: [],
+                required: true, 
+            },
+            {
+                model: User,
+                as: 'User',
+                attributes: ['name', 'avatar'],
+            },
+        ],
+        order: [['createdAt', 'DESC']],
+        limit: _limit,
+        offset,
+        distinct: true,
+    };
+    if (includeIngredients) {
+        queryOptions.include.push({
+            model: Ingredient,
+            as: 'ingredients',
+            attributes: ['id', 'name', 'img'],
+            through: { attributes: ['measure'] },
+        });
+    }
+
+    const { count, rows: recipes } = await Recipe.findAndCountAll(queryOptions);
+
+    const formattedRecipes = recipes.map(recipe => {
+        const recipeData = recipe.get({ plain: true });
+
+        const result = {
+            id: recipeData.id,
+            title: recipeData.title,
+            description: recipeData.description,
+            time: recipeData.time,
+            thumb: recipeData.thumb,
+            createdAt: recipeData.createdAt,
+            ownerName: recipe.User?.name,
+            ownerAvatar: recipe.User?.avatar,
+            isFavorite: true, 
+        };
+
+        if (includeIngredients) {
+            result.ingredients =
+                recipeData.ingredients?.map(ing => ({
+                    id: ing.id,
+                    name: ing.name,
+                    img: ing.img,
+                    measure: ing.RecipeIngredient?.measure,
+                })) || [];
+        }
+
+        return result;
+    });
+
+    const paginationData = calculatePaginationData(count, _page, _limit);
+    if (_page > paginationData.totalPage || _page < 1) {
+        throw HttpError(400, 'Page is out of range');
+    }
+
+    return formattedRecipes?.length > 0 ? { recipes: formattedRecipes, ...paginationData } : { recipes: [] };
 }

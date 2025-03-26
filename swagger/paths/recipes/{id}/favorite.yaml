@@ -1,58 +1,119 @@
 tags:
-  - Recipes
-summary: Update favorite status of a recipe
+    - Recipes
+summary: Get user's favorite recipes
 description: |
-  This endpoint allows an authenticated user to mark or unmark a recipe as favorite.
-  The request body must include the `favorite` field (boolean).
-  The response will return the recipe ID and the updated favorite status.
-operationId: updateFavoriteController
+    Returns paginated list of user's favorite recipes.
+    Can get favorites for any user by ID (if authorized as admin)
+    or only own favorites when using own ID.
+operationId: getUserFavoriteRecipes
 security:
-  - bearerAuth: []
+    - bearerAuth: []
 parameters:
-  - in: path
-    name: id
-    description: The ID of the recipe to update favorite status
-    required: true
-    schema:
-      type: string
-      example: '6462a8f74c3d0ddd28897fcd'
-requestBody:
-  required: true
-  content:
-    application/json:
+    - in: path
+      name: id
+      required: true
       schema:
-        type: object
-        required:
-          - favorite
-        properties:
-          favorite:
-            description: 'Indicates whether the recipe is marked as favorite'
-            type: boolean
-            example: true
+          type: string
+          example: 'user123'
+      description: |
+          ID of the user whose favorites to retrieve.
+          For regular users - must be their own ID.
+    - in: query
+      name: page
+      schema:
+          type: integer
+          minimum: 1
+          default: 1
+      description: Page number for pagination
+    - in: query
+      name: limit
+      schema:
+          type: integer
+          minimum: 1
+          maximum: 50
+          default: 20
+      description: Number of items per page
 responses:
-  '200':
-    description: Successfully updated the favorite status
-    content:
-      application/json:
-        schema:
-          type: object
-          required:
-            - recipeId
-            - favorite
-          properties:
-            recipeId:
-              description: 'ID of the recipe'
-              type: string
-              example: '6462a8f74c3d0ddd28897fcd'
-            favorite:
-              description: 'Updated favorite status of the recipe'
-              type: boolean
-              example: true
-  '400':
-    description: 'Bad request (invalid input data)'
-  '401':
-    $ref: '../../../components/responses/401.yaml'
-  '404':
-    description: 'Recipe not found'
-  '500':
-    $ref: '../../../components/responses/500.yaml'
+    '200':
+        description: Successful operation
+        content:
+            application/json:
+                schema:
+                    type: object
+                    properties:
+                        recipes:
+                            type: array
+                            items:
+                                type: object
+                                properties:
+                                    id:
+                                        type: string
+                                        example: 'recipe456'
+                                    title:
+                                        type: string
+                                        example: 'Recipe title'
+                                    description:
+                                        type: string
+                                        example: 'Recipe description'
+                                    time:
+                                        type: integer
+                                        example: 30
+                                    thumb:
+                                        type: string
+                                        format: uri
+                                        example: 'https://example.com/image.jpg'
+                                    createdAt:
+                                        type: string
+                                        format: date-time
+                                        example: '2023-05-20T14:30:00.000Z'
+                                    ownerName:
+                                        type: string
+                                        example: 'owner name'
+                                    ownerAvatar:
+                                        type: string
+                                        format: uri
+                                        example: 'https://example.com/avatar.jpg'
+                                    isFavorite:
+                                        type: boolean
+                                        example: true
+                                    ingredients:
+                                        type: array
+                                        items:
+                                            type: object
+                                            properties:
+                                                id:
+                                                    type: string
+                                                    example: 'ingredient789'
+                                                name:
+                                                    type: string
+                                                    example: 'ingredients name'
+                                                img:
+                                                    type: string
+                                                    format: uri
+                                                    example: 'https://example.com/ingredient.jpg'
+                                                measure:
+                                                    type: string
+                                                    example: '200 г'
+                        currentPage:
+                            type: integer
+                            example: 1
+                        totalPages:
+                            type: integer
+                            example: 5
+                        totalRecipes:
+                            type: integer
+                            example: 100
+                        recipesPerPage:
+                            type: integer
+                            example: 20
+    '400':
+        description: |
+            Bad Request. Possible reasons:
+            - Invalid user ID format
+            - Page number out of range
+    '401':
+        description: Unauthorized (missing or invalid token)
+    '403':
+        description: Forbidden (trying to access other user's favorites without permission)
+    '500':
+        description: Internal server error

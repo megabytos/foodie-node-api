@@ -4,12 +4,13 @@ import {
     getOneRecipe,
     deleteRecipe,
     createRecipe,
-    updateRecipe,
     popularRecipes,
-    updateFavoriteController,
     getUserOwnRecipesController,
+    addToFavoriteController,
+    removeFromFavoriteController,
+    getUserFavoriteRecipesController,
 } from '../controllers/recipesControllers.js';
-import { createRecipeSchema, updateRecipeSchema, updateStatusRecipeSchema } from '../schemas/recipesSchemas.js';
+import { createRecipeSchema} from '../schemas/recipesSchemas.js';
 import validateBody from '../helpers/validateBody.js';
 import controllerWrapper from '../helpers/controllerWrapper.js';
 import auth from '../middlewares/authenticate.js';
@@ -29,8 +30,11 @@ recipesRouter.post('/', auth, upload.single('thumb'), validateBody(createRecipeS
 
 recipesRouter.get('/:id/own-recipes', auth, controllerWrapper(getUserOwnRecipesController));
 
-recipesRouter.put('/:id', auth, validateBody(updateRecipeSchema), controllerWrapper(updateRecipe));
+recipesRouter.get('/:id/favorite', auth, controllerWrapper(getUserFavoriteRecipesController));
 
-recipesRouter.patch('/:id/favorite', auth, validateBody(updateStatusRecipeSchema), controllerWrapper(updateFavoriteController));
+recipesRouter.post('/:id/favorite', auth, controllerWrapper(addToFavoriteController));
+
+recipesRouter.delete('/:id/favorite', auth, controllerWrapper(removeFromFavoriteController));
+
 
 export default recipesRouter;

@@ -1,0 +1,45 @@
+tags:
+    - Recipes
+summary: Remove recipe from user's favorites
+description: |
+    Removes a specific recipe from the authenticated user's favorites list.
+    Returns error if recipe was not in favorites.
+operationId: removeFromFavorite
+security:
+    - bearerAuth: []
+parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+          type: string
+          example: 'recipe456'
+      description: ID of the recipe to remove from favorites
+responses:
+    '200':
+        description: Recipe successfully removed from favorites
+        content:
+            application/json:
+                schema:
+                    type: object
+                    properties:
+                        success:
+                            type: boolean
+                            example: true
+                        message:
+                            type: string
+                            example: 'Recipe removed from favorites'
+                        recipeId:
+                            type: string
+                            example: 'recipe456'
+    '400':
+        description: |
+            Bad Request. Possible reasons:
+            - Recipe was not in favorites
+            - Invalid recipe ID format
+    '401':
+        description: Unauthorized (missing or invalid token)
+    '404':
+        description: Recipe not found
+    '500':
+        description: Internal server error

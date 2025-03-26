@@ -1,0 +1,52 @@
+tags:
+    - Recipes
+summary: Add recipe to user's favorites
+description: |
+    Adds a specific recipe to the authenticated user's favorites list.
+    Returns error if recipe is already in favorites.
+operationId: addToFavorite
+security:
+    - bearerAuth: []
+parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+          type: string
+      description: ID of the recipe to add to favorites
+responses:
+    '200':
+        description: Recipe successfully added to favorites
+        content:
+            application/json:
+                schema:
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                            example: 1
+                        userId:
+                            type: string
+                            example: 'user123'
+                        recipeId:
+                            type: string
+                            example: 'recipe456'
+                        createdAt:
+                            type: string
+                            format: date-time
+                            example: '2023-05-20T14:30:00.000Z'
+                        updatedAt:
+                            type: string
+                            format: date-time
+                            example: '2023-05-20T14:30:00.000Z'
+    '400':
+        description: |
+            Bad Request. Possible reasons:
+            - Recipe is already in favorites
+            - Invalid recipe ID format
+    '401':
+        description: Unauthorized (missing or invalid token)
+    '404':
+        description: Recipe not found
+    '500':
+        description: Internal server error
