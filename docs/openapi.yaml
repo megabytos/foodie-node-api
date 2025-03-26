@@ -80,6 +80,9 @@ paths:
             $ref: ../swagger/paths/recipes/{id}/updateRecipe.yaml
         delete:
             $ref: ../swagger/paths/recipes/{id}/deleteRecipe.yaml
+    /recipes/{id}/own-recipes:
+        get:
+            $ref: ../swagger/paths/recipes/{id}/ownRecipes.yaml
     /recipes/{id}/favorite:
         patch:
             $ref: ../swagger/paths/recipes/{id}/favorite.yaml

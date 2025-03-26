@@ -119,7 +119,6 @@ export async function addRecipe(data) {
         file,
         ownerId,
     } = data;
-
     let thumb = null;
     if (file) {
         try {
@@ -128,7 +127,6 @@ export async function addRecipe(data) {
             throw HttpError(500, 'Error saving recipe photo: ' + error.message);
         }
     }
-
     let ingredients = [];
     try {
         ingredients = JSON.parse(ingredientsString);
@@ -138,7 +136,6 @@ export async function addRecipe(data) {
     } catch (error) {
         throw HttpError(400, 'Invalid ingredients format: ' + error.message);
     }
-
     const transaction = await sequelize.transaction();
     try {
         const newRecipe = await Recipe.create(
@@ -243,4 +240,69 @@ export async function updateFavoriteStatus(userId, recipeId, favorite) {
     }
 
     return { recipeId, favorite };
+}
+
+export async function getUserOwnRecipes({ ownerId, page = 1, limit = 10, currentUserId = null }) {
+    const _limit = Number(limit) > 0 ? Number(limit) : 20;
+    const _page = Number(page) > 1 ? Number(page) : 1;
+    const offset = (_page - 1) * _limit;
+    const queryOptions = {
+        where: { ownerId },
+        attributes: ['id', 'title', 'description', 'time', 'thumb', 'createdAt'],
+        include: [
+            {
+                model: User,
+                as: 'User',
+                attributes: ['name', 'avatar'],
+            },
+            {
+                model: Ingredient,
+                as: 'ingredients',
+                attributes: ['id', 'name', 'img'],
+                through: { attributes: ['measure'] },
+            },
+        ],
+        order: [['createdAt', 'DESC']],
+        limit: _limit,
+        offset,
+        distinct: true,
+    };
+    if (currentUserId) {
+        queryOptions.include.push({
+            model: UserFavorite,
+            as: 'favorites',
+            where: { userId: currentUserId },
+            required: false,
+            attributes: [],
+        });
+    }
+    const { count, rows: recipes } = await Recipe.findAndCountAll(queryOptions);
+    const formattedRecipes = recipes.map(recipe => {
+        const recipeData = recipe.get({ plain: true });
+        return {
+            id: recipeData.id,
+            title: recipeData.title,
+            description: recipeData.description,
+            time: recipeData.time,
+            thumb: recipeData.thumb,
+            createdAt: recipeData.createdAt,
+            ownerName: recipe.User?.name,
+            ownerAvatar: recipe.User?.avatar,
+            ingredients: recipeData.ingredients.map(ing => ({
+                id: ing.id,
+                name: ing.name,
+                img: ing.img,
+                measure: ing.RecipeIngredient.measure,
+            })),
+            ...(currentUserId && {
+                isFavorite: recipeData.favorites?.length > 0,
+            }),
+        };
+    });
+
+    const paginationData = calculatePaginationData(count, page, limit);
+    if (page > paginationData.totalPage || page < 1) {
+        throw HttpError(400, 'Page is out of range');
+    }
+    return formattedRecipes?.length > 0 ? { recipes: formattedRecipes, ...paginationData } : { recipes: formattedRecipes };
 }

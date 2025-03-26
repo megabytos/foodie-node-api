@@ -1,0 +1,115 @@
+tags:
+    - Recipes
+summary: Get user's own recipes with pagination
+description: |
+    Returns a paginated list of recipes created by the specified user.
+    Includes ingredients list and favorite status for authenticated users.
+operationId: getUserOwnRecipes
+security:
+    - bearerAuth: []
+parameters:
+    - in: path
+      name: id
+      required: true
+      schema:
+          type: string
+      description: ID of the user whose recipes to retrieve
+    - in: query
+      name: page
+      schema:
+          type: integer
+          minimum: 1
+          default: 1
+      description: Page number for pagination
+    - in: query
+      name: limit
+      schema:
+          type: integer
+          minimum: 1
+          maximum: 50
+          default: 20
+      description: Number of items per page
+responses:
+    '200':
+        description: Successful operation
+        content:
+            application/json:
+                schema:
+                    type: object
+                    properties:
+                        recipes:
+                            type: array
+                            items:
+                                type: object
+                                properties:
+                                    id:
+                                        type: string
+                                        example: 'recipe id'
+                                    title:
+                                        type: string
+                                        example: 'Recipe title'
+                                    description:
+                                        type: string
+                                        example: 'Recipe description'
+                                    time:
+                                        type: integer
+                                        example: 30
+                                    thumb:
+                                        type: string
+                                        format: uri
+                                        example: 'https://example.com/image.jpg'
+                                    createdAt:
+                                        type: string
+                                        format: date-time
+                                        example: '2023-05-15T10:00:00.000Z'
+                                    ownerName:
+                                        type: string
+                                        example: 'Owner name'
+                                    ownerAvatar:
+                                        type: string
+                                        format: uri
+                                        example: 'https://example.com/avatar.jpg'
+                                    ingredients:
+                                        type: array
+                                        items:
+                                            type: object
+                                            properties:
+                                                id:
+                                                    type: string
+                                                    example: 'ingredient id'
+                                                name:
+                                                    type: string
+                                                    example: 'Bacon'
+                                                img:
+                                                    type: string
+                                                    format: uri
+                                                    example: 'https://example.com/ingredient.jpg'
+                                                measure:
+                                                    type: string
+                                                    example: '200 г'
+                                    isFavorite:
+                                        type: boolean
+                                        example: true
+                        currentPage:
+                            type: integer
+                            example: 1
+                        totalPages:
+                            type: integer
+                            example: 5
+                        totalRecipes:
+                            type: integer
+                            example: 100
+                        recipesPerPage:
+                            type: integer
+                            example: 20
+    '400':
+        description: |
+            Bad Request. Possible reasons:
+            - Invalid user ID format
+            - Page number out of range
+    '401':
+        description: Unauthorized (missing or invalid token)
+    '404':
+        description: User not found
+    '500':
+        description: Internal server error

@@ -1,4 +1,13 @@
-import { listRecipes, getRecipe, addRecipe, removeRecipe, updateRecipeById, getPopularRecipes, updateFavoriteStatus } from '../services/recipesServices.js';
+import {
+    listRecipes,
+    getRecipe,
+    addRecipe,
+    removeRecipe,
+    updateRecipeById,
+    getPopularRecipes,
+    updateFavoriteStatus,
+    getUserOwnRecipes,
+} from '../services/recipesServices.js';
 import { getCurrentUserData } from '../middlewares/authenticate.js';
 
 export const getAllRecipes = async (req, res) => {
@@ -12,6 +21,14 @@ export const getOneRecipe = async (req, res) => {
     const { id } = req.params;
     const recipe = await getRecipe({ id });
     res.status(200).json(recipe);
+};
+
+export const getUserOwnRecipesController = async (req, res) => {
+    const { id } = req.user;
+    const { id: ownerId } = req.params;
+    const { page = 1, limit = 20 } = req.query;
+    const recipes = await getUserOwnRecipes({ currentUserId: id, ownerId, page, limit });
+    res.status(200).json(recipes);
 };
 
 export const deleteRecipe = async (req, res) => {
