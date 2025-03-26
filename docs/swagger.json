@@ -385,7 +385,7 @@
           "Users"
         ],
         "summary": "Get full details of a user",
-        "description": "Retrieve detailed information about a user. \n- If the logged-in user requests their own details, the following data will be returned:\n  - `id`\n  - `name`\n  - `email`\n  - `avatarURL`\n  - `totalRecipes`\n  - `totalFollowers`\n  - `totalFollowing`\n  - `totalFavoriteRecipes`\n\n- If the logged-in user requests details of another user, the following data will be returned:\n  - `id`\n  - `name`\n  - `email`\n  - `avatarURL`\n  - `totalRecipes`\n  - `totalFollowers`\n",
+        "description": "Retrieve detailed information about a user. \n- If the logged-in user requests their own details, the following data will be returned:\n  - `id`\n  - `name`\n  - `email`\n  - `avatarURL`\n  - `totalRecipes`\n  - `totalFollowers`\n  - `totalFollowing`\n  - `totalFavoriteRecipes`\n\n- If the logged-in user requests details of another user, the following data will be returned:\n  - `id`\n  - `name`\n  - `email`\n  - `avatarURL`\n  - `totalRecipes`\n  - `totalFollowers`\n  - `isFollowing`\n",
         "operationId": "getUserFullDetails",
         "security": [
           {
@@ -472,6 +472,11 @@
                           "description": "Total number of favorite recipes of the user",
                           "type": "integer",
                           "example": 5
+                        },
+                        "isFollowing": {
+                          "description": "Indicates whether the current user follows this user",
+                          "type": "boolean",
+                          "example": false
                         }
                       }
                     }
