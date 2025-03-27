@@ -19,8 +19,10 @@ export const getAllRecipes = async (req, res) => {
 };
 
 export const getOneRecipe = async (req, res) => {
+    const userData = getCurrentUserData(req);
+    const currentUserId = userData ? userData.id : null;
     const { id } = req.params;
-    const recipe = await getRecipe({ id });
+    const recipe = await getRecipe({ id },currentUserId);
     res.status(200).json(recipe);
 };
 
