@@ -49,23 +49,6 @@
         "$oid": "64c8d958249fae54bae90bb3"
       }
     ],
-    "following": [
-      {
-        "$oid": "64c8d958249fae54bae90bb9"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb7"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb6"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb2"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb0"
-      }
-    ],
     "password": "12345678"
   },
   {
@@ -90,23 +73,6 @@
       },
       {
         "$oid": "64c8d958249fae54bae90bb2"
-      }
-    ],
-    "following": [
-      {
-        "$oid": "64c8d958249fae54bae90bb9"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb8"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb5"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb3"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb1"
       }
     ],
     "password": "12345678"
@@ -135,23 +101,6 @@
         "$oid": "64c8d958249fae54bae90bb3"
       }
     ],
-    "following": [
-      {
-        "$oid": "64c8d958249fae54bae90bb9"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb8"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb7"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb4"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb2"
-      }
-    ],
     "password": "12345678"
   },
   {
@@ -176,23 +125,6 @@
       },
       {
         "$oid": "64c8d958249fae54bae90bb4"
-      }
-    ],
-    "following": [
-      {
-        "$oid": "64c8d958249fae54bae90bb9"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb8"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb7"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb6"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb3"
       }
     ],
     "password": "12345678"
@@ -221,23 +153,6 @@
         "$oid": "64c8d958249fae54bae90bb5"
       }
     ],
-    "following": [
-      {
-        "$oid": "64c8d958249fae54bae90bb9"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb8"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb7"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb6"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb2"
-      }
-    ],
     "password": "12345678"
   },
   {
@@ -262,23 +177,6 @@
       },
       {
         "$oid": "64c8d958249fae54bae90bb5"
-      }
-    ],
-    "following": [
-      {
-        "$oid": "64c8d958249fae54bae90bb9"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb8"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb7"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb6"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb1"
       }
     ],
     "password": "12345678"
@@ -307,23 +205,6 @@
         "$oid": "64c8d958249fae54bae90bb5"
       }
     ],
-    "following": [
-      {
-        "$oid": "64c8d958249fae54bae90bb9"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb8"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb7"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb6"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb0"
-      }
-    ],
     "password": "12345678"
   },
   {
@@ -348,23 +229,6 @@
       },
       {
         "$oid": "64c8d958249fae54bae90bb5"
-      }
-    ],
-    "following": [
-      {
-        "$oid": "64c8d958249fae54bae90bb9"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb8"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb7"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb6"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb3"
       }
     ],
     "password": "12345678"
@@ -393,23 +257,6 @@
         "$oid": "64c8d958249fae54bae90bb5"
       }
     ],
-    "following": [
-      {
-        "$oid": "64c8d958249fae54bae90bb9"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb8"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb7"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb6"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb2"
-      }
-    ],
     "password": "12345678"
   },
   {
@@ -434,23 +281,6 @@
       },
       {
         "$oid": "64c8d958249fae54bae90bb5"
-      }
-    ],
-    "following": [
-      {
-        "$oid": "64c8d958249fae54bae90bb9"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb8"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb7"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb6"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb0"
       }
     ],
     "password": "12345678"
