@@ -67,19 +67,46 @@ export async function listRecipes({ page, limit, favorite, category, ingredient,
     return recipes?.length > 0 ? { recipes, ...paginationData } : { recipes };
 }
 
-export async function getRecipe(query) {
+export async function getRecipe(query, currentUserId) {
+    const include = [
+        {
+            model: Ingredient,
+            as: 'ingredients',
+            through: { attributes: ['measure'] },
+        },
+        {
+            model: User,
+            attributes: ['id', 'name', 'avatar'],
+        },
+        {
+            model: Area,
+            attributes: ['id', 'name'],
+        },
+        {
+            model: Category,
+            attributes: ['id', 'name'],
+        },
+    ];
+
+    if (currentUserId) {
+        include.push({
+            model: UserFavorite,
+            as: 'favorites',
+            where: { userId: currentUserId },
+            attributes: ['userId'],
+            required: false,
+        });
+    }
+
     const recipe = await Recipe.findOne({
         where: query,
-        include: [
-            { model: Ingredient, as: 'ingredients', through: { attributes: ['measure'] } },
-            { model: User, attributes: ['id', 'name', 'avatar'] },
-            { model: Area, attributes: ['id', 'name'] },
-            { model: Category, attributes: ['id', 'name'] },
-        ],
+        include,
     });
+
     if (!recipe) {
         throw HttpError(404, 'Recipe not found');
     }
+
     const transformedRecipe = {
         ...recipe.toJSON(),
         ingredients:
@@ -94,12 +121,17 @@ export async function getRecipe(query) {
         category: recipe.Category?.name || null,
         ownerName: recipe.User?.name || null,
         ownerAvatar: recipe.User?.avatar || null,
+        isFavorite: currentUserId ? recipe.favorites?.length > 0 : false,
     };
+
     delete transformedRecipe.Area;
     delete transformedRecipe.Category;
     delete transformedRecipe.User;
+    delete transformedRecipe.favorites;
+
     return transformedRecipe;
 }
+
 
 export async function removeRecipe(query) {
     const user = await getUserById(query.ownerId);
