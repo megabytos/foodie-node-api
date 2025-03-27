@@ -1,31 +1,475 @@
-[{
-  "_id": {
-    "$oid": "64c8d958249fae54bae90bb9"
+[
+  {
+    "_id": {
+      "$oid": "64c8d958249fae54bae90bb9"
+    },
+    "name": "GoIT",
+    "avatar": "https://res.cloudinary.com/dxlahrm0m/image/upload/v1743084741/goit_avatar_dmyynh.jpg",
+    "email": "goit@gmail.com",
+    "followers": [
+      {
+        "$oid": "64c8d958249fae54bae90bb8"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb7"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb6"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb5"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb4"
+      }
+    ],
+    "following": [
+      {
+        "$oid": "64c8d958249fae54bae90bb8"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb6"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb3"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb2"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb1"
+      }
+    ],
+    "password": "12345678"
   },
-  "name": "GoIT",
-  "avatar": null,
-  "email": "goit@gmail.com",
-  "followers": [],
-  "following": []
-},
-{
-  "_id": {
-    "$oid": "64c8d958249fae54bae90bb8"
+  {
+    "_id": {
+      "$oid": "64c8d958249fae54bae90bb8"
+    },
+    "name": "John Doe",
+    "avatar": "https://res.cloudinary.com/dxlahrm0m/image/upload/v1734299088/ContactsApp/Nick.jpg",
+    "email": "user@gmail.com",
+    "followers": [
+      {
+        "$oid": "64c8d958249fae54bae90bb9"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb7"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb5"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb4"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb3"
+      }
+    ],
+    "following": [
+      {
+        "$oid": "64c8d958249fae54bae90bb9"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb7"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb6"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb2"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb0"
+      }
+    ],
+    "password": "12345678"
   },
-  "name": "Foodies user",
-  "avatar": null,
-  "email": "user@gmail.com",
-  "followers": [],
-  "following": []
-},
-{
-  "_id": {
-    "$oid": "64c8d958249fae54bae90bb7"
+  {
+    "_id": {
+      "$oid": "64c8d958249fae54bae90bb7"
+    },
+    "name": "Larry Pageim",
+    "avatar": "https://res.cloudinary.com/dxlahrm0m/image/upload/v1734302161/ContactsApp/Adama.jpg",
+    "email": "larry@gmail.com",
+    "followers": [
+      {
+        "$oid": "64c8d958249fae54bae90bb9"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb8"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb6"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb4"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb2"
+      }
+    ],
+    "following": [
+      {
+        "$oid": "64c8d958249fae54bae90bb9"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb8"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb5"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb3"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb1"
+      }
+    ],
+    "password": "12345678"
   },
-  "name": "Larry Pageim",
-  "avatar": null,
-  "email": "larry@gmail.com",
-  "followers": [],
-  "following": []
-}
+  {
+    "_id": {
+      "$oid": "64c8d958249fae54bae90bb6"
+    },
+    "name": "Batman",
+    "avatar": "https://res.cloudinary.com/dxlahrm0m/image/upload/v1743084728/batman_lnyabb.png",
+    "email": "bruce@wayne.com",
+    "followers": [
+      {
+        "$oid": "64c8d958249fae54bae90bb9"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb8"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb7"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb5"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb3"
+      }
+    ],
+    "following": [
+      {
+        "$oid": "64c8d958249fae54bae90bb9"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb8"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb7"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb4"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb2"
+      }
+    ],
+    "password": "12345678"
+  },
+  {
+    "_id": {
+      "$oid": "64c8d958249fae54bae90bb5"
+    },
+    "name": "Superman",
+    "avatar": "https://res.cloudinary.com/dxlahrm0m/image/upload/v1743084765/superman_sbqkn5.webp",
+    "email": "clark@kent.com",
+    "followers": [
+      {
+        "$oid": "64c8d958249fae54bae90bb9"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb8"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb7"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb6"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb4"
+      }
+    ],
+    "following": [
+      {
+        "$oid": "64c8d958249fae54bae90bb9"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb8"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb7"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb6"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb3"
+      }
+    ],
+    "password": "12345678"
+  },
+  {
+    "_id": {
+      "$oid": "64c8d958249fae54bae90bb4"
+    },
+    "name": "Thor",
+    "avatar": "https://res.cloudinary.com/dxlahrm0m/image/upload/v1743084770/tor_aghqr7.jpg",
+    "email": "thor@asgard.com",
+    "followers": [
+      {
+        "$oid": "64c8d958249fae54bae90bb9"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb8"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb7"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb6"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb5"
+      }
+    ],
+    "following": [
+      {
+        "$oid": "64c8d958249fae54bae90bb9"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb8"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb7"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb6"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb2"
+      }
+    ],
+    "password": "12345678"
+  },
+  {
+    "_id": {
+      "$oid": "64c8d958249fae54bae90bb3"
+    },
+    "name": "Hulk",
+    "avatar": "https://res.cloudinary.com/dxlahrm0m/image/upload/v1743084750/hulk_zddvih.jpg",
+    "email": "bruce@banner.com",
+    "followers": [
+      {
+        "$oid": "64c8d958249fae54bae90bb9"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb8"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb7"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb6"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb5"
+      }
+    ],
+    "following": [
+      {
+        "$oid": "64c8d958249fae54bae90bb9"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb8"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb7"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb6"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb1"
+      }
+    ],
+    "password": "12345678"
+  },
+  {
+    "_id": {
+      "$oid": "64c8d958249fae54bae90bb2"
+    },
+    "name": "Black Widow",
+    "avatar": "https://res.cloudinary.com/dxlahrm0m/image/upload/v1743084733/black_widow_ai5swi.jpg",
+    "email": "natasha@romanoff.com",
+    "followers": [
+      {
+        "$oid": "64c8d958249fae54bae90bb9"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb8"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb7"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb6"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb5"
+      }
+    ],
+    "following": [
+      {
+        "$oid": "64c8d958249fae54bae90bb9"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb8"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb7"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb6"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb0"
+      }
+    ],
+    "password": "12345678"
+  },
+  {
+    "_id": {
+      "$oid": "64c8d958249fae54bae90bb1"
+    },
+    "name": "Aquaman",
+    "avatar": "https://res.cloudinary.com/dxlahrm0m/image/upload/v1743084724/aquaman_ow66kw.webp",
+    "email": "arthur@curry.com",
+    "followers": [
+      {
+        "$oid": "64c8d958249fae54bae90bb9"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb8"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb7"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb6"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb5"
+      }
+    ],
+    "following": [
+      {
+        "$oid": "64c8d958249fae54bae90bb9"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb8"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb7"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb6"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb3"
+      }
+    ],
+    "password": "12345678"
+  },
+  {
+    "_id": {
+      "$oid": "64c8d958249fae54bae90bb0"
+    },
+    "name": "Green Lantern",
+    "avatar": "https://res.cloudinary.com/dxlahrm0m/image/upload/v1743084746/green_opwvqc.jpg",
+    "email": "hal@jordan.com",
+    "followers": [
+      {
+        "$oid": "64c8d958249fae54bae90bb9"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb8"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb7"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb6"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb5"
+      }
+    ],
+    "following": [
+      {
+        "$oid": "64c8d958249fae54bae90bb9"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb8"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb7"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb6"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb2"
+      }
+    ],
+    "password": "12345678"
+  },
+  {
+    "_id": {
+      "$oid": "64c8d958249fae54bae90bff"
+    },
+    "name": "Flash",
+    "avatar": "https://res.cloudinary.com/dxlahrm0m/image/upload/v1743084737/flash_oelyts.png",
+    "email": "barry@allen.com",
+    "followers": [
+      {
+        "$oid": "64c8d958249fae54bae90bb9"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb8"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb7"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb6"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb5"
+      }
+    ],
+    "following": [
+      {
+        "$oid": "64c8d958249fae54bae90bb9"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb8"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb7"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb6"
+      },
+      {
+        "$oid": "64c8d958249fae54bae90bb0"
+      }
+    ],
+    "password": "12345678"
+  }
 ]

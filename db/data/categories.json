@@ -1,76 +1,122 @@
-[{
-  "_id": {
-    "$oid": "6462a6cd4c3d0ddd28897f8a"
+[
+  {
+    "_id": {
+      "$oid": "6462a6cd4c3d0ddd28897f8a"
+    },
+    "name": "Seafood",
+    "imagesURL": "https://res.cloudinary.com/dxlahrm0m/image/upload/v1743080801/Seafood_rfs3wm.webp",
+    "description": "Dive into an ocean of flavors, where each bite of seafood is a harmonious blend of freshness and indulgence, a celebration of the finest treasures from the deep blue."
   },
-  "name": "Seafood"
-},{
-  "_id": {
-    "$oid": "6462a6cd4c3d0ddd28897f8b"
+  {
+    "_id": {
+      "$oid": "6462a6cd4c3d0ddd28897f8b"
+    },
+    "name": "Lamb",
+    "imagesURL": "https://res.cloudinary.com/dxlahrm0m/image/upload/v1743080796/Lamb_uywydd.webp",
+    "description": "Embark on a journey of tender elegance, where every cut of lamb is a bold statement of rich flavors, and each bite tells a story of sophisticated culinary mastery."
   },
-  "name": "Lamb"
-},{
-  "_id": {
-    "$oid": "6462a6cd4c3d0ddd28897f8c"
+  {
+    "_id": {
+      "$oid": "6462a6cd4c3d0ddd28897f8c"
+    },
+    "name": "Starter",
+    "imagesURL": "https://res.cloudinary.com/dxlahrm0m/image/upload/v1743080804/Starter_wlfell.webp",
+    "description": "Begin your meal with a burst of creativity, where every starter is a delicate balance of flavors, setting the perfect tone for a truly unforgettable dining experience."
   },
-  "name": "Starter"
-},{
-  "_id": {
-    "$oid": "6462a6cd4c3d0ddd28897f8d"
+  {
+    "_id": {
+      "$oid": "6462a6cd4c3d0ddd28897f8d"
+    },
+    "name": "Chicken",
+    "imagesURL": "https://res.cloudinary.com/dxlahrm0m/image/upload/v1743080792/Chicken_ymgr6j.jpg",
+    "description": "Discover the perfect harmony in every piece of chicken, where each dish is a timeless combination of tenderness and flavor, a classic favorite elevated to new heights."
   },
-  "name": "Chicken"
-},{
-  "_id": {
-    "$oid": "6462a6cd4c3d0ddd28897f8e"
+  {
+    "_id": {
+      "$oid": "6462a6cd4c3d0ddd28897f8e"
+    },
+    "name": "Beef",
+    "imagesURL": "https://res.cloudinary.com/dxlahrm0m/image/upload/v1743080791/Beef_tq1gn9.webp",
+    "description": "Savor the artistry in every cut of beef, where each bite brings you closer to a masterpiece of savory indulgence, showcasing the richness and depth of the finest meats."
   },
-  "name": "Beef"
-},{
-  "_id": {
-    "$oid": "6462a6cd4c3d0ddd28897f8f"
+  {
+    "_id": {
+      "$oid": "6462a6cd4c3d0ddd28897f8f"
+    },
+    "name": "Dessert",
+    "imagesURL": "https://res.cloudinary.com/dxlahrm0m/image/upload/v1743080794/Desserts_j6ptk2.webp",
+    "description": "Go on a taste journey, where every sip is a sophisticated creative chord, and every dessert is an expression of the most refined gastronomic desires."
   },
-  "name": "Dessert"
-},{
-  "_id": {
-    "$oid": "6462a6cd4c3d0ddd28897f90"
+  {
+    "_id": {
+      "$oid": "6462a6cd4c3d0ddd28897f90"
+    },
+    "name": "Vegan",
+    "imagesURL": "https://res.cloudinary.com/dxlahrm0m/image/upload/v1743080805/Vegan_udukxl.webp",
+    "description": "Experience the pure joy of plant-based perfection, where each vegan dish is a vibrant celebration of fresh ingredients and flavors, offering a healthier yet equally indulgent alternative."
   },
-  "name": "Vegan"
-},{
-  "_id": {
-    "$oid": "6462a6cd4c3d0ddd28897f91"
+  {
+    "_id": {
+      "$oid": "6462a6cd4c3d0ddd28897f91"
+    },
+    "name": "Pork",
+    "imagesURL": "https://res.cloudinary.com/dxlahrm0m/image/upload/v1743080800/Pork_wkd4rj.webp",
+    "description": "Delight in the juicy tenderness of pork, where each bite is a fusion of savory richness and subtle sweetness, delivering an unforgettable experience for the senses."
   },
-  "name": "Pork"
-},{
-  "_id": {
-    "$oid": "6462a6cd4c3d0ddd28897f92"
+  {
+    "_id": {
+      "$oid": "6462a6cd4c3d0ddd28897f92"
+    },
+    "name": "Vegetarian",
+    "imagesURL": "https://res.cloudinary.com/dxlahrm0m/image/upload/v1743080807/Vegetarian_yulear.webp",
+    "description": "Immerse yourself in a world of vibrant, wholesome flavors, where every vegetarian dish is an inspiring expression of nature's bounty, thoughtfully crafted for your enjoyment."
   },
-  "name": "Vegetarian"
-},{
-  "_id": {
-    "$oid": "6462a6cd4c3d0ddd28897f93"
+  {
+    "_id": {
+      "$oid": "6462a6cd4c3d0ddd28897f93"
+    },
+    "name": "Miscellaneous",
+    "imagesURL": "https://res.cloudinary.com/dxlahrm0m/image/upload/v1743080797/Miscellaneous_a4xwwt.webp",
+    "description": "Step into a world of culinary surprises, where each dish in this category offers an eclectic mix of ingredients and flavors, challenging the norms and inviting you to explore the unexpected."
   },
-  "name": "Miscellaneous"
-},{
-  "_id": {
-    "$oid": "6462a6cd4c3d0ddd28897f94"
+  {
+    "_id": {
+      "$oid": "6462a6cd4c3d0ddd28897f94"
+    },
+    "name": "Pasta",
+    "imagesURL": "https://res.cloudinary.com/dxlahrm0m/image/upload/v1743080799/Pasta_tk1crz.webp",
+    "description": "Indulge in a pasta adventure, where every twist and turn is an ode to Italy's finest traditions, bringing together the freshest ingredients for a delightful taste experience."
   },
-  "name": "Pasta"
-},{
-  "_id": {
-    "$oid": "6462a6cd4c3d0ddd28897f95"
+  {
+    "_id": {
+      "$oid": "6462a6cd4c3d0ddd28897f95"
+    },
+    "name": "Breakfast",
+    "imagesURL": "https://res.cloudinary.com/dxlahrm0m/image/upload/v1743080792/Breakfast_mgvw7c.webp",
+    "description": "Begin your day with an extraordinary breakfast, where every bite is a warm embrace, bringing together comfort and creativity to fuel your morning with delicious energy."
   },
-  "name": "Breakfast"
-},{
-  "_id": {
-    "$oid": "6462a6cd4c3d0ddd28897f96"
+  {
+    "_id": {
+      "$oid": "6462a6cd4c3d0ddd28897f96"
+    },
+    "name": "Side",
+    "imagesURL": "https://res.cloudinary.com/dxlahrm0m/image/upload/v1743080802/Side_mxwypz.webp",
+    "description": "Complement your main course with sides that are more than just an accompaniment, where every dish is crafted to elevate the meal, adding a perfect balance of flavor and texture."
   },
-  "name": "Side"
-},{
-  "_id": {
-    "$oid": "6462a6cd4c3d0ddd28897f97"
+  {
+    "_id": {
+      "$oid": "6462a6cd4c3d0ddd28897f97"
+    },
+    "name": "Goat",
+    "imagesURL": "https://res.cloudinary.com/dxlahrm0m/image/upload/v1743080795/Goat_slu4jy.webp",
+    "description": "Experience the bold and distinctive flavors of goat, where each dish showcases the unique tenderness and richness of this exquisite meat, crafted to tantalize the taste buds."
   },
-  "name": "Goat"
-},{
-  "_id": {
-    "$oid": "6462a6cd4c3d0ddd28897f98"
-  },
-  "name": "Soup"
-}]
+  {
+    "_id": {
+      "$oid": "6462a6cd4c3d0ddd28897f98"
+    },
+    "name": "Soup",
+    "imagesURL": "https://res.cloudinary.com/dxlahrm0m/image/upload/v1743080805/soup_cbaczn.jpg",
+    "description": "Warm your soul with every spoonful of soup, where each bowl is a comforting blend of flavors, carefully crafted to nourish and delight, bringing warmth to any moment."
+  }
+]
