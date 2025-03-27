@@ -76,13 +76,18 @@ paths:
     /recipes/{id}:
         get:
             $ref: ../swagger/paths/recipes/{id}/getOneRecipe.yaml
-        put:
-            $ref: ../swagger/paths/recipes/{id}/updateRecipe.yaml
         delete:
             $ref: ../swagger/paths/recipes/{id}/deleteRecipe.yaml
+    /recipes/{id}/own-recipes:
+        get:
+            $ref: ../swagger/paths/recipes/{id}/ownRecipes.yaml
     /recipes/{id}/favorite:
-        patch:
+        get:
             $ref: ../swagger/paths/recipes/{id}/favorite.yaml
+        post:
+            $ref: ../swagger/paths/recipes/{id}/addToFavorite.yaml
+        delete:
+            $ref: ../swagger/paths/recipes/{id}/removeFromFavorite.yaml
 
 components:
     securitySchemes:

@@ -116,6 +116,9 @@ export const userFullDetails = async (userId, loggedInUserId) => {
             ...(userId === loggedInUserId
                 ? [[sequelize.literal(`(SELECT COUNT(*) FROM "UserFavorites" WHERE "UserFavorites"."userId" = "User"."id")`), 'totalFavoriteRecipes']]
                 : []),
+            ...(userId !== loggedInUserId
+                ? [[sequelize.literal(`(SELECT COUNT(*) > 0 FROM "UserFollowers" WHERE "userId" = "User"."id" AND "followerId" = '${loggedInUserId}')`),'isFollowing', ]]
+                : []),
         ],
     });
 
@@ -139,7 +142,7 @@ export async function updateAvatar(id, file, folderName) {
         await user.update({ avatar }, { returning: true });
         return { id: user.id, avatarURL: user.avatar };
     } catch (error) {
-        throw HttpError(500, 'Error during the saving user avatar in DB:');
+        throw HttpError(500, 'Error during the saving user avatar in DB');
     }
 }
 
@@ -238,7 +241,7 @@ export async function getFollowData({
         order: [[{ model: User, as: alias }, 'id', 'ASC']],
         replacements: { userId: id },
     });
-    
+
     const paginationData = calculatePaginationData(count, page, limit);
     if (page > paginationData.totalPage || page < 1) {
         throw HttpError(400, 'Page is out of range');

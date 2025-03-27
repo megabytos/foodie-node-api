@@ -1,11 +1,10 @@
 tags:
     - Recipes
-summary: Get user's favorite recipes
+summary: Get user's own recipes with pagination
 description: |
-    Returns paginated list of user's favorite recipes.
-    Can get favorites for any user by ID (if authorized as admin)
-    or only own favorites when using own ID.
-operationId: getUserFavoriteRecipes
+    Returns a paginated list of recipes created by the specified user.
+    Includes ingredients list and favorite status for authenticated users.
+operationId: getUserOwnRecipes
 security:
     - bearerAuth: []
 parameters:
@@ -14,10 +13,7 @@ parameters:
       required: true
       schema:
           type: string
-          example: 'user123'
-      description: |
-          ID of the user whose favorites to retrieve.
-          For regular users - must be their own ID.
+      description: ID of the user whose recipes to retrieve
     - in: query
       name: page
       schema:
@@ -48,7 +44,7 @@ responses:
                                 properties:
                                     id:
                                         type: string
-                                        example: 'recipe456'
+                                        example: 'recipe id'
                                     title:
                                         type: string
                                         example: 'Recipe title'
@@ -65,17 +61,14 @@ responses:
                                     createdAt:
                                         type: string
                                         format: date-time
-                                        example: '2023-05-20T14:30:00.000Z'
+                                        example: '2023-05-15T10:00:00.000Z'
                                     ownerName:
                                         type: string
-                                        example: 'owner name'
+                                        example: 'Owner name'
                                     ownerAvatar:
                                         type: string
                                         format: uri
                                         example: 'https://example.com/avatar.jpg'
-                                    isFavorite:
-                                        type: boolean
-                                        example: true
                                     ingredients:
                                         type: array
                                         items:
@@ -83,10 +76,10 @@ responses:
                                             properties:
                                                 id:
                                                     type: string
-                                                    example: 'ingredient789'
+                                                    example: 'ingredient id'
                                                 name:
                                                     type: string
-                                                    example: 'ingredients name'
+                                                    example: 'Bacon'
                                                 img:
                                                     type: string
                                                     format: uri
@@ -94,6 +87,9 @@ responses:
                                                 measure:
                                                     type: string
                                                     example: '200 г'
+                                    isFavorite:
+                                        type: boolean
+                                        example: true
                         currentPage:
                             type: integer
                             example: 1
@@ -113,7 +109,7 @@ responses:
             - Page number out of range
     '401':
         description: Unauthorized (missing or invalid token)
-    '403':
-        description: Forbidden (trying to access other user's favorites without permission)
+    '404':
+        description: User not found
     '500':
         description: Internal server error
