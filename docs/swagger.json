@@ -12,6 +12,9 @@
   "servers": [
     {
       "url": "http://localhost:3000/api"
+    },
+    {
+      "url": "https://foodie-node-api.onrender.com/api"
     }
   ],
   "tags": [
