@@ -61,7 +61,7 @@ async function seedDatabase() {
         await Category.bulkCreate(categories.map(category => ({
             id: category._id.$oid,
             name: category.name,
-            imagesURL: category.imagesURL,
+            srcSet: category.srcSet,
             description: category.description,
         })));
         console.log('Categories loaded.');
