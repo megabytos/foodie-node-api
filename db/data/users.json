@@ -23,23 +23,6 @@
         "$oid": "64c8d958249fae54bae90bb4"
       }
     ],
-    "following": [
-      {
-        "$oid": "64c8d958249fae54bae90bb8"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb6"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb3"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb2"
-      },
-      {
-        "$oid": "64c8d958249fae54bae90bb1"
-      }
-    ],
     "password": "12345678"
   },
   {
