@@ -12,6 +12,12 @@ const Category = sequelize.define('Category', {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    imagesURL: {
+        type: DataTypes.STRING,
+    },
+    description : {
+        type: DataTypes.STRING,
+    }
 });
 
 export default Category;
