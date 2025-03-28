@@ -12,8 +12,8 @@ const Category = sequelize.define('Category', {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    imagesURL: {
-        type: DataTypes.STRING,
+    srcSet: {
+        type: DataTypes.JSON,
     },
     description : {
         type: DataTypes.STRING,
