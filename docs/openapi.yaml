@@ -21,8 +21,7 @@ tags:
       description: Recipe management, search, favorites, and personal recipe operations including creation and deletion.
 
 servers:
-    - url: http://localhost:3000/api
-    - url: https://foodie-node-api.onrender.com/api
+    - url: https://foodie-node-api-04wv.onrender.com/api
 
 paths:
     /users/register:

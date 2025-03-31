@@ -327,7 +327,6 @@ export async function getUserOwnRecipes({ ownerId, page = 1, limit = 10, current
             }),
         };
     });
-
     const paginationData = calculatePaginationData(count, page, limit);
     if (page > paginationData.totalPage || page < 1) {
         throw HttpError(400, 'Page is out of range');
@@ -340,7 +339,6 @@ export async function getUserFavoriteRecipes({ userId, page = 1, limit = 10, inc
     const _limit = Number(limit) > 0 ? Number(limit) : 20;
     const _page = Number(page) > 1 ? Number(page) : 1;
     const offset = (_page - 1) * _limit;
-
     const queryOptions = {
         attributes: ['id', 'title', 'description', 'time', 'thumb', 'createdAt'],
         include: [
@@ -370,12 +368,9 @@ export async function getUserFavoriteRecipes({ userId, page = 1, limit = 10, inc
             through: { attributes: ['measure'] },
         });
     }
-
     const { count, rows: recipes } = await Recipe.findAndCountAll(queryOptions);
-
     const formattedRecipes = recipes.map(recipe => {
         const recipeData = recipe.get({ plain: true });
-
         const result = {
             id: recipeData.id,
             title: recipeData.title,
@@ -387,7 +382,6 @@ export async function getUserFavoriteRecipes({ userId, page = 1, limit = 10, inc
             ownerAvatar: recipe.User?.avatar,
             isFavorite: true, 
         };
-
         if (includeIngredients) {
             result.ingredients =
                 recipeData.ingredients?.map(ing => ({
@@ -397,14 +391,11 @@ export async function getUserFavoriteRecipes({ userId, page = 1, limit = 10, inc
                     measure: ing.RecipeIngredient?.measure,
                 })) || [];
         }
-
         return result;
     });
-
     const paginationData = calculatePaginationData(count, _page, _limit);
     if (_page > paginationData.totalPage || _page < 1) {
         throw HttpError(400, 'Page is out of range');
     }
-
     return formattedRecipes?.length > 0 ? { recipes: formattedRecipes, ...paginationData } : { recipes: [] };
 }
