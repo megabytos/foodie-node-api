@@ -11,10 +11,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000/api"
-    },
-    {
-      "url": "https://foodie-node-api.onrender.com/api"
+      "url": "https://foodie-node-api-04wv.onrender.com/api"
     }
   ],
   "tags": [
